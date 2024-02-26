@@ -1,0 +1,37 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main", "Dev" ]
+  pull_request:
+    branches: [ "main", "Dev" ]
+
+jobs:
+  # This workflow contains multiple jobs
+  build_test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false 
+      matrix:
+        node-version: [17.x, 18.x, 20.x, 21.x]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # install applicaion dependencies
+      - name: Install dependencies
+        working-directory: ./client-app
+        run: |
+          npm install
+      # build and test the apps
+      - name: build
+        working-directory: ./client-app
+        run: |
+          npm run build
