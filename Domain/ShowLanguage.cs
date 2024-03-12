@@ -21,7 +21,7 @@
         public int LanguageId { get; set; }
 
         [Comment("langauge")]
-        [ForeignKey(nameof(Language))]
+        [ForeignKey(nameof(LanguageId))]
         public Language Language { get; set; } = null!;
     }
 }

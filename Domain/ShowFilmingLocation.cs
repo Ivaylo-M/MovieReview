@@ -21,7 +21,7 @@
         public int FilmingLocationId { get; set; }
 
         [Comment("filming location")]
-        [ForeignKey(nameof(FilmingLocation))]
+        [ForeignKey(nameof(FilmingLocationId))]
         public FilmingLocation FilmingLocation { get; set; } = null!;
     }
 }
