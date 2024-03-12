@@ -9,6 +9,11 @@
     [Comment("genre table")]
     public class Genre
     {
+        public Genre()
+        {
+            this.Shows = new HashSet<ShowGenre>();
+        }
+
         [Comment("genre id")]
         [Key]
         public int GenreId { get; set; }
@@ -17,5 +22,7 @@
         [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
+
+        public ICollection<ShowGenre> Shows { get; set; } = null!;
     }
 }

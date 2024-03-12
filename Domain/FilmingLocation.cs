@@ -9,6 +9,11 @@
     [Comment("filming location table")]
     public class FilmingLocation
     {
+        public FilmingLocation()
+        {
+            this.Shows = new HashSet<ShowFilmingLocation>();
+        }
+
         [Comment("filming location id")]
         [Key]
         public int FilmingLocationId { get; set; }
@@ -17,5 +22,7 @@
         [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
+
+        public ICollection<ShowFilmingLocation> Shows { get; set; } = null!;
     }
 }

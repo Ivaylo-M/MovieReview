@@ -1,10 +1,14 @@
-var builder = WebApplication.CreateBuilder(args);
+using API.Infrastructure;
+
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 
-var app = builder.Build();
+builder.Services.ConfigurateDbContext(builder.Configuration);
+
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
@@ -14,4 +18,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

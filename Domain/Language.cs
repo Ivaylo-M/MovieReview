@@ -9,6 +9,11 @@
     [Comment("language table")]
     public class Language
     {
+        public Language()
+        {
+            this.Shows = new HashSet<ShowLanguage>();
+        }
+
         [Comment("language id")]
         [Key]
         public int LanguageId { get; set; }
@@ -17,5 +22,7 @@
         [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
+
+        public ICollection<ShowLanguage> Shows { get; set; } = null!;
     }
 }
