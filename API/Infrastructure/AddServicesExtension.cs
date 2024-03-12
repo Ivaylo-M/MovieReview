@@ -1,7 +1,7 @@
 ﻿namespace API.Infrastructure
 {
-    using Application.Users;
     using Persistence.Repositories;
+    using Application.Users;
 
     public static class AddServicesExtension
     {
