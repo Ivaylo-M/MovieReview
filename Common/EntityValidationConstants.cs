@@ -12,6 +12,9 @@
         public static class User
         {
             public const int BioMaxLength = 1200;
+            public const int PasswordMinLength = 5;
+            public const int NameMinLength = 2;
+            public const int NameMaxLength = 100;
         }
 
         public static class ShowType

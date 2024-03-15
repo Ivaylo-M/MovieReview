@@ -3,6 +3,14 @@
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    
+    using Application.DTOs.Users;
+    using Application.Response;
+    using API.Infrastructure;
+    
+    using static Application.Users.RegisterUser;
+    using static Application.Users.LoginUser;
+    using static Application.Users.LogoutUser;
 
     [AllowAnonymous]
     [Route("api/[controller]")]
@@ -18,24 +26,49 @@
 
         [Route("register")]
         [HttpPost]
-        public ActionResult Register()
+        public async Task<ActionResult> Register([FromBody] RegisterUserDto registerDto)
         {
-            return Ok(true);
+            RegisterUserCommand registerCommand = new RegisterUserCommand
+            {
+                Name = registerDto.Name,
+                Email = registerDto.Email,
+                Password = registerDto.Password
+            };
+
+            Result<UserDto> result = await this.mediator.Send(registerCommand);
+
+            return Ok(result);
         }
 
         [Route("login")]
         [HttpPost]
-        public ActionResult Login()
+        public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
         {
-            return Ok(true);
+            LoginUserCommand loginCommand = new LoginUserCommand
+            {
+                Email = loginDto.Email,
+                Password = loginDto.Password,
+                RememberMe = loginDto.RememberMe
+            };
+
+            Result<UserDto> result = await this.mediator.Send(loginCommand);
+
+            return Ok(result);
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("logout")]
         [HttpPost]
-        public ActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return Ok(true);
+            LogoutUserCommand logoutCommand = new LogoutUserCommand
+            {
+                UserId = User!.GetById()
+            };
+
+            Result<Unit> result = await this.mediator.Send(logoutCommand);
+
+            return Ok(result);
         }
     }
 }
