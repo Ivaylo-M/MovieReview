@@ -28,14 +28,14 @@
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] RegisterUserDto registerDto)
         {
-            RegisterUserCommand registerCommand = new RegisterUserCommand
+            RegisterUserCommand command = new RegisterUserCommand
             {
                 Name = registerDto.Name,
                 Email = registerDto.Email,
                 Password = registerDto.Password
             };
 
-            Result<UserDto> result = await this.mediator.Send(registerCommand);
+            Result<UserDto> result = await this.mediator.Send(command);
 
             return Ok(result);
         }
@@ -44,14 +44,14 @@
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
         {
-            LoginUserCommand loginCommand = new LoginUserCommand
+            LoginUserCommand command = new LoginUserCommand
             {
                 Email = loginDto.Email,
                 Password = loginDto.Password,
                 RememberMe = loginDto.RememberMe
             };
 
-            Result<UserDto> result = await this.mediator.Send(loginCommand);
+            Result<UserDto> result = await this.mediator.Send(command);
 
             return Ok(result);
         }
@@ -61,12 +61,12 @@
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            LogoutUserCommand logoutCommand = new LogoutUserCommand
+            LogoutUserCommand command = new LogoutUserCommand
             {
                 UserId = User!.GetById()
             };
 
-            Result<Unit> result = await this.mediator.Send(logoutCommand);
+            Result<Unit> result = await this.mediator.Send(command);
 
             return Ok(result);
         }

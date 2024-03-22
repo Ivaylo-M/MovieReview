@@ -19,12 +19,6 @@
                 .WithMany(p => p.Shows)
                 .HasForeignKey(s => s.PhotoId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            builder
-                .HasOne(s => s.ShowType)
-                .WithMany(st => st.Shows)
-                .HasForeignKey(s => s.ShowTypeId)
-                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

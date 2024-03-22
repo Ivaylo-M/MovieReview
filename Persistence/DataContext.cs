@@ -17,8 +17,6 @@
 
         public DbSet<Review> Reviews { get; set; } = null!;
 
-        public DbSet<ShowType> ShowTypes { get; set; } = null!;
-
         public DbSet<Show> Shows { get; set; } = null!;
 
         public DbSet<Photo> Photos { get; set; } = null!;
