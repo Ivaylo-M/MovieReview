@@ -111,7 +111,7 @@
             SetUpReturningShow(this.show);
 
             this.photoServiceMock
-                .Setup(ps => ps.AddPhotoAsync(command.File))
+                .Setup(ps => ps.AddPhotoAsync(command.File, "Movies/Test"))
                 .ReturnsAsync(Result<ImageUploadResult>.Success(new ImageUploadResult
                 {
                     PublicId = "public-id",
