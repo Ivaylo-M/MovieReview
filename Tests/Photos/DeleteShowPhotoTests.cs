@@ -13,6 +13,7 @@
     using Application.Services.Contracts;
     
     using static Application.Photos.DeleteShowPhoto;
+    using Domain.Enums;
 
     [TestFixture]
     public class DeleteShowPhotoTests
@@ -32,7 +33,7 @@
             this.show = new Show
             {
                 ShowId = Guid.NewGuid(),
-                ShowTypeId = 1,
+                ShowType = ShowType.Movie,
                 Title = "Test",
                 Duration = 120,
                 ReleaseDate = new DateTime(2022, 3, 25),

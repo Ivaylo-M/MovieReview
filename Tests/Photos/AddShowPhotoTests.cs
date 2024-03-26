@@ -13,6 +13,7 @@
     using Application.Services.Contracts;
     
     using static Application.Photos.AddShowPhoto;
+    using Domain.Enums;
 
     [TestFixture]
     public class AddShowPhotoTests
@@ -30,7 +31,7 @@
             this.handler = new AddShowPhotoHandler(this.photoServiceMock.Object, this.repositoryMock.Object);
             this.show = new Show
             {
-                ShowTypeId = 1,
+                ShowType = ShowType.Movie,
                 Title = "Test",
                 Duration = 120,
                 ReleaseDate = new DateTime(2022, 3, 25)

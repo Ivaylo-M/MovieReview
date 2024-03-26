@@ -36,11 +36,12 @@
         }
 
         [Route("delete-show-photo")]
-        public async Task<ActionResult> DeleteShowPhoto([FromBody] DeleteShowPhotoDto deleteShowPhotoDto)
+        [HttpPost]
+        public async Task<ActionResult> DeleteShowPhoto([FromBody] string showId)
         {
             DeleteShowPhotoCommand command = new DeleteShowPhotoCommand
             {
-                ShowId = deleteShowPhotoDto.ShowId
+                ShowId = showId
             };
 
             Result<Unit> result = await this.mediator.Send(command);

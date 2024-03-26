@@ -27,7 +27,7 @@
             {
                 ImageUploadParams uploadParams = new ImageUploadParams
                 {
-                    File = new FileDescription(file.FileName, stream)
+                    File = new FileDescription(file.FileName, stream),
                 };
 
                 try

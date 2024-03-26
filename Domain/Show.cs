@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    
+    using Domain.Enums;
     using Microsoft.EntityFrameworkCore;
     
     using static Common.EntityValidationConstants.Show;
@@ -28,11 +28,7 @@
 
         [Comment("show type id")]
         [Required]
-        public int ShowTypeId { get; set; }
-
-        [Comment("show type")]
-        [ForeignKey(nameof(ShowTypeId))]
-        public ShowType ShowType { get; set; } = null!;
+        public ShowType ShowType { get; set; }
 
         [Comment("show title")]
         [Required]
