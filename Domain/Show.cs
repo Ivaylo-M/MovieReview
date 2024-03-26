@@ -40,18 +40,17 @@
         public string Title { get; set; } = null!;
 
         [Comment("movie duration")]
-        public DateTime? Duration { get; set; }
+        public int? Duration { get; set; }
 
         [Comment("tv series episode duration")]
-        public DateTime? EpisodeDuration { get; set; }
+        public int? EpisodeDuration { get; set; }
 
         [Comment("show photo id")]
-        [Required]
-        public string PhotoId { get; set; } = null!;
+        public string? PhotoId { get; set; }
 
         [Comment("show photo")]
         [ForeignKey(nameof(PhotoId))]
-        public Photo Photo { get; set; } = null!;
+        public Photo? Photo { get; set; } = null!;
 
         [Comment("show description id")]
         [Required]

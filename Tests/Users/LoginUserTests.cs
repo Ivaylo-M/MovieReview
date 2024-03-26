@@ -61,13 +61,16 @@
         [Test]
         public async Task Handle_ValidCommand_LoginUser()
         {
+            //Arrange
             var queryable = new List<User> { user }.AsQueryable();
             SetUpReturningUser(repositoryMock, queryable);
             SetUpSignInManager(signInManagerMock, SignInResult.Success);
 
+            //Act
             var result = await handler.
                 Handle(new LoginUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.That(result.Data!.Name, Is.EqualTo(user.UserName));
             VerifySignInManager(user, result, signInManagerMock);
@@ -76,12 +79,15 @@
         [Test]
         public async Task Handle_ReturnsError_WhenUserIsNotFound()
         {
+            //Arrange
             var queryable = new List<User> { }.AsQueryable();
             SetUpReturningUser(repositoryMock, queryable);
 
+            //Act
             var result = await handler.
                 Handle(new LoginUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.That(result.ErrorMessage, Is.EqualTo("The user is not found"));
         }
@@ -89,13 +95,16 @@
         [Test]
         public async Task Handle_ReturnsError_WhenSignInManager_ReturnsError()
         {
+            //Arrange
             var queryable = new List<User> { user }.AsQueryable();
             SetUpReturningUser(repositoryMock, queryable);
             SetUpSignInManager(signInManagerMock, SignInResult.Failed);
 
+            //Act
             var result = await handler.
                 Handle(new LoginUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.That(result.ErrorMessage, Is.EqualTo("Invalid email or password"));
             VerifySignInManager(user, result, signInManagerMock);
@@ -104,6 +113,7 @@
         [Test]
         public async Task Handle_ReturnsError_WhenSignInManager_ThrowsError()
         {
+            //Arrange
             var queryable = new List<User> { user }.AsQueryable();
             SetUpReturningUser(repositoryMock, queryable);
             signInManagerMock.
@@ -114,9 +124,11 @@
                     It.IsAny<bool>())).
                     ThrowsAsync(new Exception());
 
+            //Act
             var result = await handler.
                 Handle(new LoginUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.That(result.ErrorMessage, Is.EqualTo("Invalid email or password"));
             VerifySignInManager(user, result, signInManagerMock);

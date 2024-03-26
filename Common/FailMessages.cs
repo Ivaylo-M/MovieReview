@@ -10,5 +10,11 @@
             public const string FailedRegister = "User registration failed";
             public const string FailedLogout = "Failed to logout";
         }
+
+        public static class Photo
+        {
+            public const string FailedUploadPhoto = "Error occured during uploading photo";
+            public const string FailedDeletePhoto = "Error occured during deleting photo";
+        }
     }
 }

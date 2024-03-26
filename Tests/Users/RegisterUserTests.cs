@@ -53,6 +53,7 @@
         [Test]
         public async Task Handle_InvalidCommand_WhenUserManagerThrowsError()
         {
+            //Arrange
             var identityError = new IdentityError
             {
                 Code = "ErrorCode",
@@ -65,9 +66,11 @@
                 It.IsAny<string>())).
                 ReturnsAsync(IdentityResult.Failed(identityError));
 
+            //Act
             var result = await handler.
                 Handle(new RegisterUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.That(result.ErrorMessage, Is.EqualTo("User registration failed"));
         }
@@ -75,12 +78,15 @@
         [Test]
         public async Task Handle_InvalidCommand_WhenSignInManagerThrowsError()
         {
+            //Arrange
             this.userSignInManagerMock
                 .Setup(sm => sm.SignInAsync(It.IsAny<User>(), It.IsAny<bool>(), It.IsAny<string>()))
                 .Throws(new Exception());
 
+            //Act
             Result<UserDto> result = await this.handler.Handle(new RegisterUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.That(result.ErrorMessage, Is.EqualTo("User registration failed"));
         }
@@ -88,6 +94,7 @@
         [Test]
         public async Task Handle_ValidCommand_RegistersUser()
         {
+            //Arrange
             RegisterUserCommand registerUserCommand = new RegisterUserCommand
             {
                 Name = "Test name"
@@ -97,8 +104,10 @@
                 .Setup(um => um.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(IdentityResult.Success);
 
+            //Act
             Result<UserDto> result = await this.handler.Handle(registerUserCommand, CancellationToken.None);
 
+            //Assert
             Assert.IsTrue(result.IsSuccess);
             Assert.That(registerUserCommand.Name, Is.EqualTo(result.Data!.Name));
         }
