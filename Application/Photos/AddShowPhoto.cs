@@ -56,9 +56,11 @@
                     return Result<Unit>.Failure(ShowAlreadyHavePhoto);
                 }
 
+                string path = $"{show.ShowType}s/{show.Title}";
+
                 try
                 {
-                    Result<ImageUploadResult> result = await this.photoService.AddPhotoAsync(request.File);
+                    Result<ImageUploadResult> result = await this.photoService.AddPhotoAsync(request.File, path);
 
                     if (!result.IsSuccess)
                     {

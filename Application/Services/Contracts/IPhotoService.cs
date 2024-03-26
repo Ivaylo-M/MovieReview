@@ -9,7 +9,7 @@
 
     public interface IPhotoService
     {
-        Task<Result<ImageUploadResult>> AddPhotoAsync(IFormFile file);
+        Task<Result<ImageUploadResult>> AddPhotoAsync(IFormFile file, string path);
 
         Task<Result<DeletionResult>> DeletePhotoAsync(Photo photo);
     }

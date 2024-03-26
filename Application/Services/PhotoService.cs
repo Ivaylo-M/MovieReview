@@ -21,13 +21,14 @@
             this.cloudinary = cloudinary;                 
         }
 
-        public async Task<Result<ImageUploadResult>> AddPhotoAsync(IFormFile file)
+        public async Task<Result<ImageUploadResult>> AddPhotoAsync(IFormFile file, string path)
         {
             using (Stream stream = file.OpenReadStream())
             {
                 ImageUploadParams uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
+                    Folder = path
                 };
 
                 try
