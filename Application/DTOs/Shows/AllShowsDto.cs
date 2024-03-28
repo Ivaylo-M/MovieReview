@@ -1,12 +1,12 @@
 ﻿namespace Application.DTOs.Shows
 {
+    using Domain.Enums;
+
     public class AllShowsDto
     {
         public string ShowId { get; set; } = null!;
 
-        public string ShowType { get; set; } = null!;
-
-        public string PhotoUrl { get; set; } = null!;
+        public string? PhotoUrl { get; set; }
 
         public string Title { get; set; } = null!;
 
@@ -16,8 +16,12 @@
 
         public float AverageRating { get; set; }
 
-        public int MyRating { get; set; }
+        public int? MyRating { get; set; }
 
         public string Description { get; set; } = null!;
+
+        public ShowType ShowType { get; set; }
+
+        public IEnumerable<int> Genres { get; set; } = null!;
     }
 }

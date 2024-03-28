@@ -14,6 +14,8 @@
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(LoginUser).Assembly));
 
+            services.AddMemoryCache();
+
             return services;
         }
     }
