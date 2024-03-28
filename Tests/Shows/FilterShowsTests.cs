@@ -1,25 +1,25 @@
 ﻿namespace Tests.Shows
 {
-    using Application.DTOs.Shows;
-    using Application.Response;
-    using Domain.Enums;
     using Microsoft.Extensions.Caching.Memory;
-    using Moq;
+    
+    using Domain.Enums;
+    using Application.Response;
+    using Application.DTOs.Shows;
+    
     using static Application.Shows.FilterShows;
 
     [TestFixture]
     public class FilterShowTests
     {
-        private Mock<IMemoryCache> memoryCache;
         private FilterShowsHandler handler;
-        private IEnumerable<AllShowsDto> shows;
 
         [SetUp]
         public void SetUp()
         {
-            this.memoryCache = new Mock<IMemoryCache>();
+            MemoryCacheOptions options = new MemoryCacheOptions();
+            IMemoryCache memoryCache = new MemoryCache(options);
 
-            this.shows = new List<AllShowsDto>
+            IEnumerable<AllShowsDto> shows = new List<AllShowsDto>
             {
                 new AllShowsDto
                 {
@@ -88,11 +88,12 @@
                 }
             };
 
-            this.memoryCache.Setup(m => m.Get("Shows")).Returns(this.shows);
+            memoryCache.Set("Shows", shows);
 
-            this.handler = new FilterShowsHandler(this.memoryCache.Object);
+            this.handler = new FilterShowsHandler(memoryCache);
         }
 
+        [Test]
         public async Task Handle_ShouldReturnAllFilterShowsQuery_WithShowTypeMovie()
         {
             //Arrange

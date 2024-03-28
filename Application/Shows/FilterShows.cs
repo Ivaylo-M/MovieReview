@@ -1,12 +1,15 @@
 ﻿namespace Application.Shows
 {
-    using Application.DTOs.Shows;
-    using Application.Response;
-    using Domain.Enums;
-    using MediatR;
-    using Microsoft.Extensions.Caching.Memory;
     using System.Threading;
     using System.Threading.Tasks;
+    
+    using MediatR;
+    using Microsoft.Extensions.Caching.Memory;
+    
+    using Domain.Enums;
+    using Application.Response;
+    using Application.DTOs.Shows;
+    
     using static Common.ExceptionMessages.MemoryCache;
 
     public class FilterShows

@@ -1,14 +1,17 @@
 ﻿namespace Tests.Shows
 {
-    using Application.DTOs.Shows;
-    using Application.Response;
+    using System.Linq.Expressions;
+    
+    using Moq;
+    using MockQueryable.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Memory;
+    
     using Domain;
     using Domain.Enums;
-    using Microsoft.Extensions.Caching.Memory;
-    using MockQueryable.EntityFrameworkCore;
-    using Moq;
     using Persistence.Repositories;
-    using System.Linq.Expressions;
+    using Application.Response;
+    using Application.DTOs.Shows;
+    
     using static Application.Shows.AllShows;
 
     [TestFixture]
@@ -17,7 +20,6 @@
         private Mock<IRepository> repositoryMock;
         private AllShowsHandler handler;
         private IMemoryCache memoryCache;
-        private IQueryable<Show> shows;
 
         [SetUp]
         public void Setup()
@@ -41,7 +43,7 @@
                 new Genre { GenreId = 7, Name = "Western"}
             };
 
-            this.shows = new List<Show>
+            IQueryable<Show> shows = new List<Show>
             {
                 new Show
                 {
@@ -177,7 +179,7 @@
             }
             .AsQueryable();
 
-            SetUpAllShows(this.shows);
+            SetUpAllShows(shows);
             SetUpUser(true);
         }
 
@@ -279,7 +281,7 @@
             };
 
             //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
+            await this.handler.Handle(query, CancellationToken.None);
 
             IEnumerable<AllShowsDto> shows = this.memoryCache.Get<IEnumerable<AllShowsDto>>("Shows")!;
 

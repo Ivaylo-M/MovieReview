@@ -1,16 +1,17 @@
 ﻿namespace Application.Shows
 {
-    using Application.DTOs.Shows;
-    using Application.Response;
-    using Application.Services.Contracts;
-    using Domain;
-    using Domain.Enums;
+    using System.Threading;
+    using System.Threading.Tasks;
+    
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Caching.Memory;
+    
+    using Domain;
     using Persistence.Repositories;
-    using System.Threading;
-    using System.Threading.Tasks;
+    using Application.Response;
+    using Application.DTOs.Shows;
+    
     using static Common.ExceptionMessages.User;
 
     public class AllShows
@@ -33,7 +34,6 @@
 
             public async Task<Result<IEnumerable<AllShowsDto>>> Handle(AllShowsQuery request, CancellationToken cancellationToken)
             {
-                //TO DO Test
                 if (await this.repository.AnyAsync<User>(u => u.Id.ToString().Equals(request.UserId.ToLower())) == false)
                 {
                     return Result<IEnumerable<AllShowsDto>>.Failure(UserNotFound);
