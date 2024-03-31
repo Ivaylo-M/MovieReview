@@ -10,6 +10,7 @@
     using static Application.Shows.AddShow;
     using static Application.Shows.AllShows;
     using static Application.Shows.FilterShows;
+    using static Application.Shows.EditShow;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -29,6 +30,21 @@
             AddShowCommand command = new AddShowCommand
             {
                 Dto = addShowDto
+            };
+
+            Result<Unit> result = await mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [Route("edit/{showId}")]
+        [HttpPost]
+        public async Task<ActionResult> EditShow([FromBody] EditShowDto editShowDto, [FromRoute] string showId)
+        {
+            EditShowCommand command = new EditShowCommand
+            {
+                Dto = editShowDto,
+                ShowId = showId
             };
 
             Result<Unit> result = await mediator.Send(command);

@@ -10,7 +10,6 @@
     using Persistence.Repositories;
     using System.Linq.Expressions;
     using static Application.Shows.EditShow;
-    using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
     public class EditShowTests
     {
