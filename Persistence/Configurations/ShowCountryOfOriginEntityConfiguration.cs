@@ -11,7 +11,7 @@
         {
             builder.ToTable("ShowsCountriesOfOrigin");
 
-            builder.HasKey(scoo => new { scoo.ShowId, scoo.CountryOfOriginid });
+            builder.HasKey(scoo => new { scoo.ShowId, scoo.CountryOfOriginId });
 
             builder
                 .HasOne(scoo => scoo.Show)
@@ -22,7 +22,7 @@
             builder
                 .HasOne(scoo => scoo.CountryOfOrigin)
                 .WithMany(coo => coo.Shows)
-                .HasForeignKey(scoo => scoo.CountryOfOriginid)
+                .HasForeignKey(scoo => scoo.CountryOfOriginId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

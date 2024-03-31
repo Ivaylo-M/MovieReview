@@ -63,7 +63,7 @@
                     shows = shows.Where(s => s.ReleaseYear <= request.MaxReleaseYear);
                 }
 
-                return Result<IEnumerable<AllShowsDto>>.Success(shows);
+                return await Task.FromResult(Result<IEnumerable<AllShowsDto>>.Success(shows));
             }
         }
     }

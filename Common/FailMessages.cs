@@ -10,5 +10,11 @@
             public const string FailedRegister = "User registration failed";
             public const string FailedLogout = "Failed to logout";
         }
+
+        public static class Show
+        {
+            public const string FailedAddShow = "Failed to create show - {0}";
+            public const string FailedEditShow = "Failed to edit show - {0}";
+        }
     }
 }

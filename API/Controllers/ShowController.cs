@@ -28,7 +28,7 @@
         {
             AddShowCommand command = new AddShowCommand
             {
-                UserId = User!.GetById(),
+                Dto = addShowDto
             };
 
             Result<Unit> result = await mediator.Send(command);

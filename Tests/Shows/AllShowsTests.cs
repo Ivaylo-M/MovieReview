@@ -134,7 +134,6 @@
                 {
                     ShowId = Guid.Parse("E0B1C3D5-A09E-4442-94CC-DA6C2E626686"),
                     ShowType = ShowType.TVSeries,
-                    EpisodeDuration = 23,
                     Title = "Test4",
                     ReleaseDate = new DateTime(1994, 5, 25),
                     Description = "Description4",
@@ -157,7 +156,6 @@
                 {
                     ShowId = Guid.Parse("CB70A8BA-F4B6-402B-B6D7-5CABD5651C88"),
                     ShowType = ShowType.TVSeries,
-                    EpisodeDuration = 45,
                     Title = "Test5",
                     ReleaseDate = new DateTime(1995, 2, 19),
                     Description = "Description5",
@@ -281,12 +279,18 @@
             };
 
             //Act
-            await this.handler.Handle(query, CancellationToken.None);
+            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
 
             IEnumerable<AllShowsDto> shows = this.memoryCache.Get<IEnumerable<AllShowsDto>>("Shows")!;
 
             //Assert
+            Assert.True(result.IsSuccess);
             Assert.That(shows.Count(), Is.EqualTo(5));
+            Assert.That(shows.First().Title, Is.EqualTo("Test1"));
+            Assert.That(shows.Skip(1).First().Title, Is.EqualTo("Test2"));
+            Assert.That(shows.Skip(2).First().Title, Is.EqualTo("Test3"));
+            Assert.That(shows.Skip(3).First().Title, Is.EqualTo("Test4"));
+            Assert.That(shows.Skip(4).First().Title, Is.EqualTo("Test5"));
         }
 
         private void SetUpUser(bool value = false)

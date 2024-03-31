@@ -18,10 +18,10 @@
 
         [Comment("country of origin id")]
         [Required]
-        public int CountryOfOriginid { get; set; }
+        public int CountryOfOriginId { get; set; }
 
         [Comment("country of origin")]
-        [ForeignKey(nameof(CountryOfOriginid))]
+        [ForeignKey(nameof(CountryOfOriginId))]
         public CountryOfOrigin CountryOfOrigin { get; set; } = null!;
     }
 }

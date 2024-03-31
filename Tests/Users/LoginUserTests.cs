@@ -46,7 +46,7 @@
                 userManagerMock.Object,
                 Mock.Of<IHttpContextAccessor>(),
                 Mock.Of<IUserClaimsPrincipalFactory<User>>(),
-                null, null, null, null);
+                null!, null!, null!, null!);
 
             handler = new LoginUserHandler(
                 signInManagerMock.Object,

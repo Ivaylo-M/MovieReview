@@ -19,5 +19,10 @@
         {
             public const string NullValue = "The value of the cache is null";
         }
+
+        public static class Show
+        {
+            public const string ShowNotFound = "The show is not found";
+        }
     }
 }

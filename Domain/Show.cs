@@ -36,9 +36,6 @@
         [Comment("movie duration")]
         public int? Duration { get; set; }
 
-        [Comment("tv series episode duration")]
-        public int? EpisodeDuration { get; set; }
-
         [Comment("show photo id")]
         public string? PhotoId { get; set; }
 
@@ -54,9 +51,6 @@
         [Comment("show release date")]
         [Required]
         public DateTime ReleaseDate { get; set; }
-
-        [Comment("tv series number of episodes")]
-        public int? NumberOfEpisodes { get; set; }
 
         [Comment("tv series end date")]
         public DateTime? EndDate { get; set; }
