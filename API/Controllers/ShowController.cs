@@ -11,6 +11,7 @@
     using static Application.Shows.AllShows;
     using static Application.Shows.FilterShows;
     using static Application.Shows.EditShow;
+    using static Application.Shows.DeleteShow;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -48,6 +49,20 @@
             };
 
             Result<Unit> result = await mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [Route("delete/{showId}")]
+        [HttpPost]
+        public async Task<ActionResult> DeleteShow([FromRoute] string showId)
+        {
+            DeleteShowCommand command = new DeleteShowCommand
+            {
+                ShowId = showId
+            };
+
+            Result<Unit> result = await this.mediator.Send(command);
 
             return Ok(result);
         }

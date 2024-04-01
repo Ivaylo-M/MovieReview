@@ -15,6 +15,7 @@
         {
             public const string FailedAddShow = "Failed to create show - {0}";
             public const string FailedEditShow = "Failed to edit show - {0}";
+            public const string FailedDeleteShow = "Failed to delete show - {0}";
         }
     }
 }

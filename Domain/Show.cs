@@ -20,6 +20,7 @@
             this.CountriesOfOrigin = new HashSet<ShowCountryOfOrigin>();
             this.Languages = new HashSet<ShowLanguage>();
             this.FilmingLocations = new HashSet<ShowFilmingLocation>();
+            this.Episodes = new HashSet<Show>();
         }
 
         [Comment("show id")]

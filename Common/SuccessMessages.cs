@@ -6,6 +6,7 @@
         {
             public const string SuccessfullyAddedShow = "Successfully added {0}";
             public const string SuccessfullyEditedShow = "Successfully edited {0}";
+            public const string SuccessfullyDeletedShow = "Successfully deleted {0}";
         }
     }
 }

@@ -182,8 +182,8 @@
                 Dto = new EditShowDto
                 {
                     ShowType = ShowType.TVSeries,
-                    Title = "Episode Title",
-                    Description = "Episode Description",
+                    Title = "TV Series Title",
+                    Description = "TV Series Description",
                     ReleaseDate = new DateTime(2020, 4, 5),
                     EndDate = new DateTime(2022, 3, 4),
                     Genres = new List<int> { 2, 4 },

@@ -1,4 +1,4 @@
-﻿namespace API.Controllers
+﻿ namespace API.Controllers
 {
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
