@@ -8,6 +8,7 @@ builder.Services.AddControllers();
 
 builder.Services.ConfigurateDbContext(builder.Configuration);
 builder.Services.ConfigurateIdentity(builder.Configuration);
+builder.Services.ConfigurateCloudinary(builder.Configuration);
 builder.Services.ConfigurateServices();
 
 WebApplication app = builder.Build();

@@ -15,19 +15,17 @@
             public const string NotAuthenticated = "The user is not authenticated";
         }
 
-        public static class MemoryCache
+        public static class Photo
         {
-            public const string NullValue = "The value of the cache is null";
+            public const string EmptyPhoto = "File is not selected or empty";
+            public const string ShowAlreadyHavePhoto = "This show already have photo";
+            public const string PhotoNotFound = "Photo does not exist";
+            public const string NoPhotoYet = "This show doesn't have a photo yet";
         }
 
         public static class Show
         {
-            public const string ShowNotFound = "The show is not found";
-        }
-
-        public static class ShowType
-        {
-            public const string InvalidShowType = "The show type is invalid";
+            public const string ShowNotFound = "This show does not exist! Please select an existing one";
         }
     }
 }

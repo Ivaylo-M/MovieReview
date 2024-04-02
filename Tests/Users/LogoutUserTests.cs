@@ -48,19 +48,24 @@
         [Test]
         public async Task Handle_ValidCommand_LogoutUser()
         {
+            //Arrange
             SetUpReturningUser(userManagerMock, user);
 
+            //Act
             var result = await handler.Handle(new LogoutUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsTrue(result.IsSuccess);
-            signInManagerMock.Verify(sm => sm.SignOutAsync(), Times.Once);
+            signInManagerMock.Verify(sm => sm.SignOutAsync(), Times.Once());
         }
 
         [Test]
         public async Task Handle_InvalidUser_ReturnsErrorResult()
         {
+            //Arrange and Act
             var result = await handler.Handle(new LogoutUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.That(result.ErrorMessage, Is.EqualTo("The user is not authenticated"));
         }
@@ -68,13 +73,16 @@
         [Test]
         public async Task Handle_FailedToLogoutUser_ReturnsFailureResult()
         {
+            //Arrange
             SetUpReturningUser(userManagerMock, user);
             signInManagerMock.
                 Setup(sm => sm.SignOutAsync()).
                 ThrowsAsync(new Exception());
 
+            //Act
             var result = await handler.Handle(new LogoutUserCommand(), CancellationToken.None);
 
+            //Assert
             Assert.IsFalse(result.IsSuccess);
             Assert.That(result.ErrorMessage, Is.EqualTo("Failed to logout"));
         }

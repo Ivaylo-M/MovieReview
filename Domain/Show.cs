@@ -20,13 +20,14 @@
             this.CountriesOfOrigin = new HashSet<ShowCountryOfOrigin>();
             this.Languages = new HashSet<ShowLanguage>();
             this.FilmingLocations = new HashSet<ShowFilmingLocation>();
-            this.Episodes = new HashSet<Show>();
         }
 
         [Comment("show id")]
         [Key]
         public Guid ShowId { get; set; }
 
+        [Comment("show type id")]
+        [Required]
         public ShowType ShowType { get; set; }
 
         [Comment("show title")]
@@ -37,12 +38,15 @@
         [Comment("movie duration")]
         public int? Duration { get; set; }
 
+        [Comment("tv series episode duration")]
+        public int? EpisodeDuration { get; set; }
+
         [Comment("show photo id")]
         public string? PhotoId { get; set; }
 
         [Comment("show photo")]
         [ForeignKey(nameof(PhotoId))]
-        public Photo? Photo { get; set; }
+        public Photo? Photo { get; set; } = null!;
 
         [Comment("show description id")]
         [Required]
@@ -52,6 +56,9 @@
         [Comment("show release date")]
         [Required]
         public DateTime ReleaseDate { get; set; }
+
+        [Comment("tv series number of episodes")]
+        public int? NumberOfEpisodes { get; set; }
 
         [Comment("tv series end date")]
         public DateTime? EndDate { get; set; }
