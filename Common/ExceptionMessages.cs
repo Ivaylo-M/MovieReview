@@ -24,5 +24,10 @@
         {
             public const string ShowNotFound = "The show is not found";
         }
+
+        public static class ShowType
+        {
+            public const string InvalidShowType = "The show type is invalid";
+        }
     }
 }
