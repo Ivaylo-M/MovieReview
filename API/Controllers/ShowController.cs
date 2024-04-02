@@ -12,6 +12,8 @@
     using static Application.Shows.FilterShows;
     using static Application.Shows.EditShow;
     using static Application.Shows.DeleteShow;
+    using static Application.Shows.ShowAddShow;
+    using static Application.Shows.ShowEditShow;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -25,6 +27,21 @@
         }
 
         [Route("add")]
+        [HttpGet]
+        public async Task<ActionResult> Add([FromBody] ShowAddShowDataDto showAddShowDataDto)
+        {
+            ShowAddShowQuery query = new ShowAddShowQuery
+            {
+                ShowType = showAddShowDataDto.ShowType,
+                TVSeriesId = showAddShowDataDto?.TVSeriesId
+            };
+
+            Result<ShowAddShowDto> result = await this.mediator.Send(query);
+
+            return Ok(result);
+        }
+
+        [Route("add")]
         [HttpPost]
         public async Task<ActionResult> AddShow([FromBody] AddShowDto addShowDto)
         {
@@ -34,6 +51,20 @@
             };
 
             Result<Unit> result = await mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [Route("edit/{showId}")]
+        [HttpGet]
+        public async Task<ActionResult> EditShow([FromRoute] string showId)
+        {
+            ShowEditShowQuery query = new ShowEditShowQuery
+            {
+                ShowId = showId,
+            };
+
+            Result<ShowEditShowDto> result = await this.mediator.Send(query);
 
             return Ok(result);
         }
