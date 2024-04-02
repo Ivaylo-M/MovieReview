@@ -27,5 +27,15 @@
         {
             public const string ShowNotFound = "This show does not exist! Please select an existing one";
         }
+
+        public static class MemoryCache
+        {
+            public const string NullValue = "The memory cache value is null";
+        }
+
+        public static class ShowType
+        {
+            public const string InvalidShowType = "The show type is invalid";
+        }
     }
 }

@@ -1,5 +1,9 @@
 ﻿namespace Tests.Shows
 {
+    using Application.DTOs.CountriesOfOrigin;
+    using Application.DTOs.FilmingLocations;
+    using Application.DTOs.Genres;
+    using Application.DTOs.Languages;
     using Application.DTOs.Shows;
     using Application.Response;
     using Domain;
@@ -8,6 +12,7 @@
     using Moq;
     using Persistence.Repositories;
     using System.Linq.Expressions;
+    using Tests.Comparers;
     using static Application.Shows.ShowAddShow;
 
     public class ShowAddOrEditShowTests
@@ -131,7 +136,7 @@
 
             //Assert
             Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("The show is not found"));
+            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
         }
 
         [Test]
@@ -161,6 +166,74 @@
             SetUpReturningCollection(this.languages);
             SetUpReturningCollection(this.countriesOfOrigin);
 
+            IEnumerable<GenreDto> expectedGenres = new List<GenreDto>
+            {
+                new GenreDto
+                {
+                    GenreId = 1,
+                    Name = "Action"
+                },
+                new GenreDto
+                {
+                    GenreId = 2,
+                    Name = "Romance"
+                },
+                new GenreDto
+                {
+                    GenreId = 3,
+                    Name = "Comedy"
+                }
+            };
+            IEnumerable<FilmingLocationDto> expectedFilmingLocation = new List<FilmingLocationDto>
+            {
+                new FilmingLocationDto
+                {
+                    FilmingLocationId = 1,
+                    Name = "Singapore"
+                },
+                new FilmingLocationDto
+                {
+                    FilmingLocationId = 2,
+                    Name = "USA"
+                }
+            };
+            IEnumerable<LanguageDto> expectedLanguages = new List<LanguageDto>
+            {
+                new LanguageDto 
+                {
+                    LanguageId = 1,
+                    Name = "English"
+                },
+                new LanguageDto
+                {
+                    LanguageId = 2,
+                    Name = "Chinese"
+                },
+                new LanguageDto
+                {
+                    LanguageId = 3,
+                    Name = "French"
+                },
+                new LanguageDto
+                {
+                    LanguageId = 4,
+                    Name = "Spanish"
+                }
+            };
+            IEnumerable<CountryOfOriginDto> expectedCountriesOfOrigin = new List<CountryOfOriginDto>
+            {
+                new CountryOfOriginDto
+                {
+                    CountryOfOriginId = 1,
+                    Name = "USA"
+                },
+                new CountryOfOriginDto
+                {
+                    CountryOfOriginId = 2,
+                    Name = "France"
+                }
+            };
+
             //Act
             Result<ShowAddShowDto> result = await this.handler.Handle(this.movieQuery, CancellationToken.None);
 
@@ -171,17 +244,10 @@
 
             Assert.That(result.Data!.Series, Is.EqualTo(null));
 
-            CollectionAssert.AreEqual(result.Data!.Genres!.Select(g => g.Name).ToList(), this.genres.Select(g => g.Name).ToList());
-            CollectionAssert.AreEqual(result.Data!.Genres!.Select(g => g.GenreId).ToList(), this.genres.Select(g => g.GenreId).ToList());
-
-            CollectionAssert.AreEqual(result.Data!.FilmingLocations!.Select(fl => fl.Name).ToList(), this.filmingLocations.Select(fl => fl.Name).ToList());
-            CollectionAssert.AreEqual(result.Data!.FilmingLocations!.Select(fl => fl.FilmingLocationId).ToList(), this.filmingLocations.Select(fl => fl.FilmingLocationId).ToList());
-
-            CollectionAssert.AreEqual(result.Data!.CountriesOfOrigin!.Select(coo => coo.Name).ToList(), this.countriesOfOrigin.Select(coo => coo.Name).ToList());
-            CollectionAssert.AreEqual(result.Data!.CountriesOfOrigin!.Select(coo => coo.CountryOfOriginId).ToList(), this.countriesOfOrigin.Select(coo => coo.CountryOfOriginId).ToList());
-
-            CollectionAssert.AreEqual(result.Data!.Languages!.Select(l => l.Name).ToList(), this.languages.Select(l => l.Name).ToList());
-            CollectionAssert.AreEqual(result.Data!.Languages!.Select(l => l.LanguageId).ToList(), this.languages.Select(l => l.LanguageId).ToList());
+            Assert.That(result.Data!.Genres, Is.EquivalentTo(expectedGenres).Using(new GenreDtoComparer()));
+            Assert.That(result.Data!.FilmingLocations, Is.EquivalentTo(expectedFilmingLocation).Using(new FilmingLocationDtoComparer()));
+            Assert.That(result.Data!.CountriesOfOrigin, Is.EquivalentTo(expectedCountriesOfOrigin).Using(new CountryOfOriginDtoComparer()));
+            Assert.That(result.Data!.Languages, Is.EquivalentTo(expectedLanguages).Using(new LanguageDtoComparer()));
         }
 
         //TV Series
@@ -194,6 +260,74 @@
             SetUpReturningCollection(this.languages);
             SetUpReturningCollection(this.countriesOfOrigin);
 
+            IEnumerable<GenreDto> expectedGenres = new List<GenreDto>
+            {
+                new GenreDto
+                {
+                    GenreId = 1,
+                    Name = "Action"
+                },
+                new GenreDto
+                {
+                    GenreId = 2,
+                    Name = "Romance"
+                },
+                new GenreDto
+                {
+                    GenreId = 3,
+                    Name = "Comedy"
+                }
+            };
+            IEnumerable<FilmingLocationDto> expectedFilmingLocation = new List<FilmingLocationDto>
+            {
+                new FilmingLocationDto
+                {
+                    FilmingLocationId = 1,
+                    Name = "Singapore"
+                },
+                new FilmingLocationDto
+                {
+                    FilmingLocationId = 2,
+                    Name = "USA"
+                }
+            };
+            IEnumerable<LanguageDto> expectedLanguages = new List<LanguageDto>
+            {
+                new LanguageDto
+                {
+                    LanguageId = 1,
+                    Name = "English"
+                },
+                new LanguageDto
+                {
+                    LanguageId = 2,
+                    Name = "Chinese"
+                },
+                new LanguageDto
+                {
+                    LanguageId = 3,
+                    Name = "French"
+                },
+                new LanguageDto
+                {
+                    LanguageId = 4,
+                    Name = "Spanish"
+                }
+            };
+            IEnumerable<CountryOfOriginDto> expectedCountriesOfOrigin = new List<CountryOfOriginDto>
+            {
+                new CountryOfOriginDto
+                {
+                    CountryOfOriginId = 1,
+                    Name = "USA"
+                },
+                new CountryOfOriginDto
+                {
+                    CountryOfOriginId = 2,
+                    Name = "France"
+                }
+            };
+
             //Act
             Result<ShowAddShowDto> result = await this.handler.Handle(this.tvSeriesQuery, CancellationToken.None);
 
@@ -204,17 +338,10 @@
 
             Assert.That(result.Data!.Series, Is.EqualTo(null));
 
-            CollectionAssert.AreEqual(result.Data!.Genres!.Select(g => g.Name).ToList(), this.genres.Select(g => g.Name).ToList());
-            CollectionAssert.AreEqual(result.Data!.Genres!.Select(g => g.GenreId).ToList(), this.genres.Select(g => g.GenreId).ToList());
-
-            CollectionAssert.AreEqual(result.Data!.FilmingLocations!.Select(fl => fl.Name).ToList(), this.filmingLocations.Select(fl => fl.Name).ToList());
-            CollectionAssert.AreEqual(result.Data!.FilmingLocations!.Select(fl => fl.FilmingLocationId).ToList(), this.filmingLocations.Select(fl => fl.FilmingLocationId).ToList());
-
-            CollectionAssert.AreEqual(result.Data!.CountriesOfOrigin!.Select(coo => coo.Name).ToList(), this.countriesOfOrigin.Select(coo => coo.Name).ToList());
-            CollectionAssert.AreEqual(result.Data!.CountriesOfOrigin!.Select(coo => coo.CountryOfOriginId).ToList(), this.countriesOfOrigin.Select(coo => coo.CountryOfOriginId).ToList());
-
-            CollectionAssert.AreEqual(result.Data!.Languages!.Select(l => l.Name).ToList(), this.languages.Select(l => l.Name).ToList());
-            CollectionAssert.AreEqual(result.Data!.Languages!.Select(l => l.LanguageId).ToList(), this.languages.Select(l => l.LanguageId).ToList());
+            Assert.That(result.Data!.Genres, Is.EquivalentTo(expectedGenres).Using(new GenreDtoComparer()));
+            Assert.That(result.Data!.FilmingLocations, Is.EquivalentTo(expectedFilmingLocation).Using(new FilmingLocationDtoComparer()));
+            Assert.That(result.Data!.CountriesOfOrigin, Is.EquivalentTo(expectedCountriesOfOrigin).Using(new CountryOfOriginDtoComparer()));
+            Assert.That(result.Data!.Languages, Is.EquivalentTo(expectedLanguages).Using(new LanguageDtoComparer()));
         }
 
         //Episode

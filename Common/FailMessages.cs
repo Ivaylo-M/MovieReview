@@ -16,5 +16,12 @@
             public const string FailedUploadPhoto = "Error occured during uploading photo";
             public const string FailedDeletePhoto = "Error occured during deleting photo";
         }
+
+        public static class Show
+        {
+            public const string FailedAddShow = "Failed to create show - {0}";
+            public const string FailedEditShow = "Failed to edit show - {0}";
+            public const string FailedDeleteShow = "Failed to delete show - {0}";
+        }
     }
 }

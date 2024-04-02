@@ -1,5 +1,7 @@
 ﻿namespace Application.DTOs.Shows
 {
+    using Application.DTOs.Photos;
+
     public class ShowEditShowDto : ShowAddShowDto
     {
         public string Title { get; set; } = null!;
@@ -13,5 +15,7 @@
         public int? Season { get; set; }
 
         public int? Duration { get; set; }
+
+        public PhotoDto? Photo { get; set; } = null!;
     }
 }

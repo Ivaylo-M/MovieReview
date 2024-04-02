@@ -322,7 +322,7 @@
 
             //Assert
             Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("The show is not found"));
+            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
         }
 
         [Test]

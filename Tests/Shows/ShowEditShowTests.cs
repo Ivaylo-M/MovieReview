@@ -12,6 +12,7 @@
     using Moq;
     using Persistence.Repositories;
     using System.Linq.Expressions;
+    using Tests.Comparers;
     using static Application.Shows.ShowEditShow;
 
     public class ShowEditShowTests
@@ -40,9 +41,11 @@
                 ReleaseDate = new DateTime(2022, 3, 4),
                 Description = "Movie Description",
                 Duration = 123,
+                PhotoId = "photoId1",
                 Photo = new Photo
                 {
-
+                    PhotoId = "photoId1",
+                    Url = "Photo Url1"
                 },
                 Genres = new List<ShowGenre>
                 {
@@ -105,6 +108,12 @@
                 ShowType = ShowType.TVSeries,
                 ReleaseDate = new DateTime(2020, 4, 5),
                 EndDate = new DateTime(2022, 3, 4),
+                PhotoId = "photoId2",
+                Photo = new Photo
+                {
+                    PhotoId = "photoId2",
+                    Url = "Photo Url2"
+                },
                 Genres = new List<ShowGenre>
                 {
                     new ShowGenre
@@ -167,6 +176,12 @@
                 ReleaseDate = new DateTime(2021, 6, 7),
                 Duration = 23,
                 Season = 1,
+                PhotoId = "photoId3",
+                Photo = new Photo
+                {
+                    PhotoId = "photoId3",
+                    Url = "Photo Url3"
+                },
                 SeriesId = Guid.Parse("e436ba43-8fb3-4562-af2a-3869f94fe290"),
                 Series = new Show
                 {
@@ -291,7 +306,7 @@
 
             //Assert
             Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("The show is not found"));
+            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
         }
 
         //Movie
@@ -446,11 +461,13 @@
             Assert.That(result.Data!.EndDate, Is.EqualTo(null));
             Assert.That(result.Data!.Series, Is.EqualTo(null));
             Assert.That(result.Data!.Season, Is.EqualTo(null));
+            Assert.That(result.Data!.Photo!.Id, Is.EqualTo("photoId1"));
+            Assert.That(result.Data!.Photo!.Url, Is.EqualTo("Photo Url1"));
 
-            CollectionAssert.AreEqual(result.Data!.Genres, expectedGenres);
-            CollectionAssert.AreEqual(result.Data!.FilmingLocations, expectedFilmingLocation);
-            CollectionAssert.AreEqual(result.Data!.Languages, expectedLanguages);
-            CollectionAssert.AreEqual(result.Data!.CountriesOfOrigin, expectedCountriesOfOrigin);
+            Assert.That(result.Data!.Genres, Is.EquivalentTo(expectedGenres).Using(new GenreDtoComparer()));
+            Assert.That(result.Data!.FilmingLocations, Is.EquivalentTo(expectedFilmingLocation).Using(new FilmingLocationDtoComparer()));
+            Assert.That(result.Data!.CountriesOfOrigin, Is.EquivalentTo(expectedCountriesOfOrigin).Using(new CountryOfOriginDtoComparer()));
+            Assert.That(result.Data!.Languages, Is.EquivalentTo(expectedLanguages).Using(new LanguageDtoComparer()));
         }
 
         //TV Series
@@ -605,11 +622,13 @@
             Assert.That(result.Data!.Duration, Is.EqualTo(null));
             Assert.That(result.Data!.Series, Is.EqualTo(null));
             Assert.That(result.Data!.Season, Is.EqualTo(null));
+            Assert.That(result.Data!.Photo!.Id, Is.EqualTo("photoId2"));
+            Assert.That(result.Data!.Photo!.Url, Is.EqualTo("Photo Url2"));
 
-            CollectionAssert.AreEqual(result.Data!.Genres, expectedGenres);
-            CollectionAssert.AreEqual(result.Data!.FilmingLocations, expectedFilmingLocation);
-            CollectionAssert.AreEqual(result.Data!.Languages, expectedLanguages);
-            CollectionAssert.AreEqual(result.Data!.CountriesOfOrigin, expectedCountriesOfOrigin);
+            Assert.That(result.Data!.Genres, Is.EquivalentTo(expectedGenres).Using(new GenreDtoComparer()));
+            Assert.That(result.Data!.FilmingLocations, Is.EquivalentTo(expectedFilmingLocation).Using(new FilmingLocationDtoComparer()));
+            Assert.That(result.Data!.CountriesOfOrigin, Is.EquivalentTo(expectedCountriesOfOrigin).Using(new CountryOfOriginDtoComparer()));
+            Assert.That(result.Data!.Languages, Is.EquivalentTo(expectedLanguages).Using(new LanguageDtoComparer()));
         }
 
         //Episode
@@ -639,6 +658,8 @@
             Assert.That(result.Data!.Series!.Id, Is.EqualTo("e436ba43-8fb3-4562-af2a-3869f94fe290"));
             Assert.That(result.Data!.Series!.Title, Is.EqualTo("Title of TV Series"));
             Assert.That(result.Data!.Season, Is.EqualTo(1));
+            Assert.That(result.Data!.Photo!.Id, Is.EqualTo("photoId3"));
+            Assert.That(result.Data!.Photo!.Url, Is.EqualTo("Photo Url3"));
         }
 
         private void SetUpReturningCollection<T>(IEnumerable<T> collection) where T : class
@@ -646,7 +667,7 @@
             TestAsyncEnumerableEfCore<T> queryable = new TestAsyncEnumerableEfCore<T>(collection.AsQueryable());
 
             this.repositoryMock
-                .Setup(r => r.All(It.IsAny<Expression<Func<T, bool>>>()))
+                .Setup(r => r.All<T>())
                 .Returns(queryable);
         }
 
