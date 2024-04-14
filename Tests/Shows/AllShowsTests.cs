@@ -263,8 +263,10 @@
             Assert.That(actualShow.PhotoUrl, Is.EqualTo("url"));
             Assert.That(actualShow.ReleaseYear, Is.EqualTo(2020));
             Assert.That(actualShow.EndYear, Is.EqualTo(null));
+            Assert.That(actualShow.Duration, Is.EqualTo(98));
             Assert.That(actualShow.AverageRating, Is.EqualTo(6f));
             Assert.That(actualShow.MyRating, Is.EqualTo(5));
+            Assert.That(actualShow.NumberOfRatings, Is.EqualTo(2));
             Assert.That(actualShow.Description, Is.EqualTo("Description1"));
             CollectionAssert.AreEqual(new List<int> { 1, 2, 4 }, actualShow.Genres);
         }

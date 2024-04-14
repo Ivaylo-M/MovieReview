@@ -50,7 +50,9 @@
                         PhotoUrl = s.Photo != null ? s.Photo.Url : null,
                         ReleaseYear = s.ReleaseDate.Year,
                         EndYear = s.EndDate.HasValue ? s.EndDate.Value.Year : null,
+                        Duration = s.Duration,
                         AverageRating = s.UserRatings.Count > 0 ? (float)s.UserRatings.Average(ur => ur.Stars) : 0f,
+                        NumberOfRatings = s.UserRatings.Count,
                         MyRating = GetUserRating(s.UserRatings, request.UserId),
                         Description = s.Description,
                         Genres = s.Genres.Select(sg => sg.GenreId)

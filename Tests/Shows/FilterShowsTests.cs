@@ -94,6 +94,106 @@
         }
 
         [Test]
+        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithTitleContainingTest() 
+        {
+            //Arrange
+            FilterShowsQuery query = new FilterShowsQuery
+            {
+                Title = "Test"
+            };
+
+            IEnumerable<string> expected = ["Test1", "Test2", "Test3", "Test4", "Test5"];
+
+            //Act
+            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            Assert.True(result.IsSuccess);
+            Assert.That(result.Data!.Count(), Is.EqualTo(5));
+            CollectionAssert.AreEqual(expected, result.Data!.Select(s => s.Title));
+        }
+
+        [Test]
+        public async Task Handle_ShouldReturnEmptyCollection_WithDifferentTitleName() 
+        {
+            //Arrange
+            FilterShowsQuery query = new FilterShowsQuery
+            {
+                Title = "Past"
+            };
+
+            IEnumerable<string> expected = [];
+
+            //Act
+            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            Assert.True(result.IsSuccess);
+            Assert.That(result.Data!.Count(), Is.EqualTo(0));
+            CollectionAssert.AreEqual(expected, result.Data!.Select(s => s.Title));
+        }
+
+        [Test]
+        public async Task Handle_ShoulrReturnCollectionWithOneRecord_WithTitleNameTest5()
+        {
+            //Arrange
+            FilterShowsQuery query = new FilterShowsQuery
+            {
+                Title = "Test5"
+            };
+
+            IEnumerable<string> expected = ["Test5"];
+
+            //Act
+            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            Assert.True(result.IsSuccess);
+            Assert.That(result.Data!.Count(), Is.EqualTo(1));
+            CollectionAssert.AreEqual(expected, result.Data!.Select(s => s.Title));
+        }
+
+        [Test]
+        public async Task Handle_ShoulrReturnCollectionWithOneRecord_WithTitleNameTEST5()
+        {
+            //Arrange
+            FilterShowsQuery query = new FilterShowsQuery
+            {
+                Title = "TEST5"
+            };
+
+            IEnumerable<string> expected = ["Test5"];
+
+            //Act
+            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            Assert.True(result.IsSuccess);
+            Assert.That(result.Data!.Count(), Is.EqualTo(1));
+            CollectionAssert.AreEqual(expected, result.Data!.Select(s => s.Title));
+        }
+
+        [Test]
+        public async Task Handle_ShoulrReturnCollectionWithOneRecord_WithTitleNametest5()
+        {
+            //Arrange
+            FilterShowsQuery query = new FilterShowsQuery
+            {
+                Title = "test5"
+            };
+
+            IEnumerable<string> expected = ["Test5"];
+
+            //Act
+            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
+
+            //Assert
+            Assert.True(result.IsSuccess);
+            Assert.That(result.Data!.Count(), Is.EqualTo(1));
+            CollectionAssert.AreEqual(expected, result.Data!.Select(s => s.Title));
+        }
+
+        [Test]
         public async Task Handle_ShouldReturnAllFilterShowsQuery_WithShowTypeMovie()
         {
             //Arrange
@@ -102,15 +202,15 @@
                 ShowTypes = new List<ShowType> { ShowType.Movie }
             };
 
+            IEnumerable<string> expected = ["Test1", "Test2", "Test3"];
+
             //Act 
             Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
             Assert.True(result.IsSuccess);
             Assert.That(result.Data!.Count(), Is.EqualTo(3));
-            Assert.That(result.Data!.First().Title, Is.EqualTo("Test1"));
-            Assert.That(result.Data!.Skip(1).First().Title, Is.EqualTo("Test2"));
-            Assert.That(result.Data!.Skip(2).First().Title, Is.EqualTo("Test3"));
+            CollectionAssert.AreEqual(expected, result.Data!.Select(s => s.Title));
         }
 
         [Test]

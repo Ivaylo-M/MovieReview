@@ -43,7 +43,7 @@
                     return Result<Unit>.Failure(ShowNotFound);
                 }
 
-                Photo? photo = await this.repository.FirstOrDefaultAsync<Photo>(p => p.PhotoId.Equals(show.PhotoId.ToLower()));
+                Photo? photo = await this.repository.FirstOrDefaultAsync<Photo>(p => p.PhotoId.Equals(show.PhotoId!.ToLower()));
 
                 if (photo == null)
                 {

@@ -16,6 +16,8 @@
     {
         public class FilterShowsQuery : IRequest<Result<IEnumerable<AllShowsDto>>>
         {
+            public string? Title { get; set; }
+
             public IEnumerable<ShowType>? ShowTypes { get; set; }
 
             public IEnumerable<int>? Genres { get; set; }
@@ -41,6 +43,10 @@
                 if (shows == null)
                 {
                     return Result<IEnumerable<AllShowsDto>>.Failure(NullValue);
+                }
+
+                if (request.Title != null) {
+                    shows = shows.Where(s => s.Title.ToLower().Contains(request.Title.ToLower()));
                 }
 
                 if (request.ShowTypes != null)

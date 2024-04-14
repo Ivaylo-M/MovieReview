@@ -10,15 +10,19 @@
 
         public string Title { get; set; } = null!;
 
+        public string Description { get; set; } = null!;
+
         public int ReleaseYear { get; set; }
 
         public int? EndYear { get; set; }
 
+        public int? Duration { get; set; }
+
         public float AverageRating { get; set; }
 
-        public int? MyRating { get; set; }
+        public int NumberOfRatings { get; set; }
 
-        public string Description { get; set; } = null!;
+        public int? MyRating { get; set; }
 
         public ShowType ShowType { get; set; }
 
