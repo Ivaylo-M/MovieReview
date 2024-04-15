@@ -9,6 +9,7 @@
     using Persistence.Repositories;
     using System.Linq.Expressions;
     using static Application.Shows.AddShow;
+    using static Common.FailMessages.Show;
 
     public class AddShowTests
     {
@@ -51,7 +52,7 @@
 
             //Assert
             Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo($"Failed to create show - {command.Dto.Title}"));
+            Assert.That(result.ErrorMessage, Is.EqualTo("Failed to create show - Test1"));
             this.repositoryMock.Verify(r => r.AddAsync(It.IsAny<Show>()), Times.Once);
             this.repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -81,7 +82,7 @@
 
             //Assert
             Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo($"Successfully added Test1"));
+            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test1"));
             this.repositoryMock.Verify(r => r.AddAsync(It.IsAny<Show>()), Times.Once);
             this.repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -111,7 +112,7 @@
 
             //Assert
             Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo($"Successfully added Test2"));
+            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test2"));
             this.repositoryMock.Verify(r => r.AddAsync(It.IsAny<Show>()), Times.Once);
             this.repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -143,7 +144,7 @@
 
             //Assert
             Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo($"Successfully added Test3"));
+            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test3"));
             this.repositoryMock.Verify(r => r.AddAsync(It.IsAny<Show>()), Times.Once);
             this.repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -175,7 +176,7 @@
 
             //Assert
             Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo($"This show does not exist! Please select an existing one"));
+            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
         }
     }
 }
