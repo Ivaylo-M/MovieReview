@@ -14,7 +14,10 @@
     using static Application.Shows.DeleteShow;
     using static Application.Shows.ShowAddShow;
     using static Application.Shows.ShowEditShow;
+    using static Application.Shows.ShowDetails;
+    using Microsoft.AspNetCore.Authorization;
 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ShowController : ControllerBase
@@ -26,9 +29,24 @@
             this.mediator = mediator;
         }
 
+        [Route("details/{showId}")]
+        [HttpGet]
+        public async Task<ActionResult> ShowDetails([FromRoute] string showId)
+        {
+            ShowDetailsQuery query = new ShowDetailsQuery
+            {
+                ShowId = showId,
+                UserId = User.GetById()
+            }
+
+            Result<ShowDetailsDto> result = await mediator.Send(query);
+
+            return Ok(result);
+        }
+
         [Route("add")]
         [HttpGet]
-        public async Task<ActionResult> Add([FromBody] ShowAddShowDataDto showAddShowDataDto)
+        public async Task<ActionResult> AddShow([FromBody] ShowAddShowDataDto showAddShowDataDto)
         {
             ShowAddShowQuery query = new ShowAddShowQuery
             {
