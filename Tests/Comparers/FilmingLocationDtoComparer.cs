@@ -11,7 +11,7 @@
                 return x.FilmingLocationId.CompareTo(y.FilmingLocationId);
             }
 
-            if (x!.Name != y.Name)
+            if (x!.Name != y!.Name)
             {
                 return x.Name.CompareTo(y.Name);
             }

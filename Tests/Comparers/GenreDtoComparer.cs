@@ -12,7 +12,7 @@
                 return x.GenreId.CompareTo(y.GenreId);
             }
 
-            if (x!.Name != y.Name)
+            if (x!.Name != y!.Name)
             {
                 return x.Name.CompareTo(y.Name);
             }

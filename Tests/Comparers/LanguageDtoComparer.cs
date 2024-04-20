@@ -11,7 +11,7 @@
                 return x.LanguageId.CompareTo(y.LanguageId);
             }
 
-            if (x!.Name != y.Name)
+            if (x!.Name != y!.Name)
             {
                 return x.Name.CompareTo(y.Name);
             }

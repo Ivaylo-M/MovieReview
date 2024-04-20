@@ -11,12 +11,12 @@
                 return x.CountryOfOriginId.CompareTo(y.CountryOfOriginId);
             }
 
-            if (x!.Name != y.Name)
+            if (x!.Name != y!.Name)
             {
                 return x.Name.CompareTo(y.Name);
             }
 
-            if (x!.HasValue != y.HasValue)
+            if (x!.HasValue != y!.HasValue)
             {
                 return x.HasValue!.Value.CompareTo(y.HasValue!.Value);
             }

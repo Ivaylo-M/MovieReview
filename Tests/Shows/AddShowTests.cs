@@ -9,7 +9,6 @@
     using Persistence.Repositories;
     using System.Linq.Expressions;
     using static Application.Shows.AddShow;
-    using static Common.FailMessages.Show;
 
     public class AddShowTests
     {
