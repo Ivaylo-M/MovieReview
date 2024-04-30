@@ -1,4 +1,4 @@
-﻿namespace Tests.Comparers
+﻿namespace Tests.Comparers.Genres
 {
     using Application.DTOs.Genres;
     using System.Collections;

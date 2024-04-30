@@ -8,7 +8,7 @@
         {
             services.AddSingleton(provider =>
             {
-                Account account = new Account(
+                Account account = new(
                     configuration["CloudinarySettings:CloudName"],
                     configuration["CloudinarySettings:ApiKey"],
                     configuration["CloudinarySettings:ApiSecret"]);

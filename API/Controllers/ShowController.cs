@@ -29,15 +29,16 @@
             this.mediator = mediator;
         }
 
+        [AllowAnonymous]
         [Route("details/{showId}")]
         [HttpGet]
         public async Task<ActionResult> ShowDetails([FromRoute] string showId)
         {
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = showId,
                 UserId = User.GetById()
-            }
+            };
 
             Result<ShowDetailsDto> result = await mediator.Send(query);
 
@@ -48,7 +49,7 @@
         [HttpGet]
         public async Task<ActionResult> AddShow([FromBody] ShowAddShowDataDto showAddShowDataDto)
         {
-            ShowAddShowQuery query = new ShowAddShowQuery
+            ShowAddShowQuery query = new()
             {
                 ShowType = showAddShowDataDto.ShowType,
                 TVSeriesId = showAddShowDataDto?.TVSeriesId
@@ -63,7 +64,7 @@
         [HttpPost]
         public async Task<ActionResult> AddShow([FromBody] AddShowDto addShowDto)
         {
-            AddShowCommand command = new AddShowCommand
+            AddShowCommand command = new()
             {
                 Dto = addShowDto
             };
@@ -77,7 +78,7 @@
         [HttpGet]
         public async Task<ActionResult> EditShow([FromRoute] string showId)
         {
-            ShowEditShowQuery query = new ShowEditShowQuery
+            ShowEditShowQuery query = new()
             {
                 ShowId = showId,
             };
@@ -91,7 +92,7 @@
         [HttpPost]
         public async Task<ActionResult> EditShow([FromBody] EditShowDto editShowDto, [FromRoute] string showId)
         {
-            EditShowCommand command = new EditShowCommand
+            EditShowCommand command = new()
             {
                 Dto = editShowDto,
                 ShowId = showId
@@ -106,7 +107,7 @@
         [HttpPost]
         public async Task<ActionResult> DeleteShow([FromRoute] string showId)
         {
-            DeleteShowCommand command = new DeleteShowCommand
+            DeleteShowCommand command = new()
             {
                 ShowId = showId
             };
@@ -116,11 +117,12 @@
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [Route("all")]
         [HttpGet]
         public async Task<ActionResult> AllShows()
         {
-            AllShowsQuery query = new AllShowsQuery
+            AllShowsQuery query = new()
             {
                 UserId = User.GetById()
             };
@@ -130,12 +132,14 @@
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [Route("filter")]
         [HttpGet]
         public async Task<ActionResult> FilterShows([FromBody] FilterShowsDto filterShowsDto)
         {
-            FilterShowsQuery query = new FilterShowsQuery
+            FilterShowsQuery query = new()
             {
+                Title = filterShowsDto.Title,
                 ShowTypes = filterShowsDto.ShowTypes,
                 Genres = filterShowsDto.Genres,
                 MinReleaseYear = filterShowsDto.MinReleaseYear,

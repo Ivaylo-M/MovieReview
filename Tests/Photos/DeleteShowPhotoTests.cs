@@ -52,14 +52,17 @@
             //Arrange
             SetUpReturningShow(null);
 
-            DeleteShowPhotoCommand command = new DeleteShowPhotoCommand();
+            DeleteShowPhotoCommand command = new();
 
             //Act
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.IsFalse(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            });
         }
 
         [Test]
@@ -70,7 +73,7 @@
             SetUpReturningShow(this.show);
             SetUpReturningPhoto(null);
 
-            DeleteShowPhotoCommand command = new DeleteShowPhotoCommand
+            DeleteShowPhotoCommand command = new()
             {
                 ShowId = this.show.ShowId.ToString()
             };
@@ -79,8 +82,11 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.IsFalse(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("Photo does not exist"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("Photo does not exist"));
+            });
         }
 
         [Test]
@@ -91,7 +97,7 @@
             SetUpReturningShow(this.show);
             SetUpReturningPhoto(this.photo);
 
-            DeleteShowPhotoCommand command = new DeleteShowPhotoCommand
+            DeleteShowPhotoCommand command = new()
             {
                 ShowId = this.show.ShowId.ToString()
             };
@@ -100,8 +106,11 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.IsFalse(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show doesn't have a photo yet"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show doesn't have a photo yet"));
+            });
         }
 
         [Test]
@@ -119,7 +128,7 @@
                     StatusCode = HttpStatusCode.OK
                 }));
 
-            DeleteShowPhotoCommand command = new DeleteShowPhotoCommand
+            DeleteShowPhotoCommand command = new()
             {
                 ShowId = this.show.ShowId.ToString()
             };
@@ -128,8 +137,11 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.IsTrue(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully deleted photo"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.SuccessMessage, Is.EqualTo("Successfully deleted photo"));
+            });
         }
 
         private void SetUpReturningPhoto(Photo? photo)

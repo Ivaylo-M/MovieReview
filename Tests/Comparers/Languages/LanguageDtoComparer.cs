@@ -1,4 +1,4 @@
-﻿namespace Tests.Comparers
+﻿namespace Tests.Comparers.Languages
 {
     using Application.DTOs.Languages;
 

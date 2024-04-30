@@ -13,8 +13,8 @@
 
         public static class Photo
         {
-            public const string FailedUploadPhoto = "Error occured during uploading photo";
-            public const string FailedDeletePhoto = "Error occured during deleting photo";
+            public const string FailedUploadPhoto = "Error occurred during uploading photo";
+            public const string FailedDeletePhoto = "Error occurred during deleting photo";
         }
 
         public static class Show

@@ -13,6 +13,10 @@
     using Persistence.Repositories;
     using System.Linq.Expressions;
     using Tests.Comparers;
+    using Tests.Comparers.CountriesOfOrigin;
+    using Tests.Comparers.FilmingLocations;
+    using Tests.Comparers.Genres;
+    using Tests.Comparers.Languages;
     using static Application.Shows.ShowAddShow;
 
     public class ShowAddOrEditShowTests
@@ -365,7 +369,7 @@
 
         private void SetUpReturningCollection<T>(IEnumerable<T> collection) where T : class 
         {
-            TestAsyncEnumerableEfCore<T> queryable = new TestAsyncEnumerableEfCore<T>(collection.AsQueryable());
+            TestAsyncEnumerableEfCore<T> queryable = new(collection.AsQueryable());
 
             this.repositoryMock
                 .Setup(r => r.All<T>())

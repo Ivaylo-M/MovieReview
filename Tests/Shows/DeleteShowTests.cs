@@ -32,8 +32,8 @@
                 ReleaseDate = new DateTime(2022, 3, 4),
                 ShowType = ShowType.Movie,
                 PhotoId = "photoId",
-                Genres = new List<ShowGenre>
-                {
+                Genres =
+                [
                     new ShowGenre
                     {
                         GenreId = 2
@@ -42,9 +42,9 @@
                     {
                         GenreId = 4
                     }
-                },
-                FilmingLocations = new List<ShowFilmingLocation>
-                {
+                ],
+                FilmingLocations =
+                [
                     new ShowFilmingLocation
                     {
                         FilmingLocationId = 1
@@ -57,9 +57,9 @@
                     {
                         FilmingLocationId = 4
                     }
-                },
-                Languages = new List<ShowLanguage>
-                {
+                ],
+                Languages =
+                [
                     new ShowLanguage
                     {
                         LanguageId = 1
@@ -68,9 +68,9 @@
                     {
                         LanguageId = 3
                     }
-                },
-                CountriesOfOrigin = new List<ShowCountryOfOrigin>
-                {
+                ],
+                CountriesOfOrigin =
+                [
                     new ShowCountryOfOrigin
                     {
                         CountryOfOriginId = 1
@@ -79,9 +79,9 @@
                     {
                         CountryOfOriginId = 2
                     }
-                },
-                UserReviews = new List<Review>
-                {
+                ],
+                UserReviews =
+                [
                     new Review
                     {
                         ReviewId = Guid.NewGuid(),
@@ -98,9 +98,9 @@
                         Content = "Movie Content 2",
                         CreatedAt = new DateTime(2023, 6, 6)
                     }
-                },
-                UserRatings = new List<Rating>
-                {
+                ],
+                UserRatings =
+                [
                     new Rating
                     {
                         UserId = Guid.NewGuid(),
@@ -116,9 +116,9 @@
                         UserId = Guid.NewGuid(),
                         Stars = 4
                     }
-                },
-                WatchListItems = new List<WatchListItem>
-                {
+                ],
+                WatchListItems =
+                [
                     new WatchListItem
                     {
                         UserId = Guid.NewGuid()
@@ -127,7 +127,7 @@
                     {
                         UserId = Guid.NewGuid()
                     }
-                }
+                ]
             };
             this.tvSeries = new Show
             {
@@ -138,8 +138,8 @@
                 EndDate = new DateTime(2022, 3, 4),
                 ShowType = ShowType.TVSeries,
                 PhotoId = "photoId",
-                Genres = new List<ShowGenre>
-                {
+                Genres =
+                [
                     new ShowGenre
                     {
                         GenreId = 2
@@ -148,9 +148,9 @@
                     {
                         GenreId = 4
                     }
-                },
-                FilmingLocations = new List<ShowFilmingLocation>
-                {
+                ],
+                FilmingLocations =
+                [
                     new ShowFilmingLocation
                     {
                         FilmingLocationId = 1
@@ -163,9 +163,9 @@
                     {
                         FilmingLocationId = 4
                     }
-                },
-                Languages = new List<ShowLanguage>
-                {
+                ],
+                Languages =
+                [
                     new ShowLanguage
                     {
                         LanguageId = 1
@@ -174,9 +174,9 @@
                     {
                         LanguageId = 3
                     }
-                },
-                CountriesOfOrigin = new List<ShowCountryOfOrigin>
-                {
+                ],
+                CountriesOfOrigin =
+                [
                     new ShowCountryOfOrigin
                     {
                         CountryOfOriginId = 1
@@ -185,9 +185,9 @@
                     {
                         CountryOfOriginId = 2
                     }
-                },
-                UserReviews = new List<Review>
-                {
+                ],
+                UserReviews =
+                [
                     new Review
                     {
                         ReviewId = Guid.NewGuid(),
@@ -204,9 +204,9 @@
                         Content = "Movie Content 2",
                         CreatedAt = new DateTime(2023, 6, 6)
                     }
-                },
-                UserRatings = new List<Rating>
-                {
+                ],
+                UserRatings =
+                [
                     new Rating
                     {
                         UserId = Guid.NewGuid(),
@@ -222,9 +222,9 @@
                         UserId = Guid.NewGuid(),
                         Stars = 4
                     }
-                },
-                WatchListItems = new List<WatchListItem>
-                {
+                ],
+                WatchListItems =
+                [
                     new WatchListItem
                     {
                         UserId = Guid.NewGuid()
@@ -233,9 +233,9 @@
                     {
                         UserId = Guid.NewGuid()
                     }
-                },
-                Episodes = new List<Show>
-                {
+                ],
+                Episodes =
+                [
                     new Show
                     {
                         ShowId = Guid.NewGuid(),
@@ -246,7 +246,7 @@
                         ShowId = Guid.NewGuid(),
                         ShowType = ShowType.Episode
                     }
-                }
+                ]
             };
             this.episode = new Show
             {
@@ -259,8 +259,8 @@
                 SeriesId = Guid.Parse("CD9B2F47-67D3-48C0-9E45-F55476F19ADB"),
                 Duration = 23,
                 PhotoId = "photoId",
-                UserReviews = new List<Review>
-                {
+                UserReviews =
+                [
                     new Review
                     {
                         ReviewId = Guid.NewGuid(),
@@ -277,9 +277,9 @@
                         Content = "Movie Content 2",
                         CreatedAt = new DateTime(2023, 6, 6)
                     }
-                },
-                UserRatings = new List<Rating>
-                {
+                ],
+                UserRatings =
+                [
                     new Rating
                     {
                         UserId = Guid.NewGuid(),
@@ -295,9 +295,9 @@
                         UserId = Guid.NewGuid(),
                         Stars = 4
                     }
-                },
-                WatchListItems = new List<WatchListItem>
-                {
+                ],
+                WatchListItems =
+                [
                     new WatchListItem
                     {
                         UserId = Guid.NewGuid()
@@ -306,7 +306,7 @@
                     {
                         UserId = Guid.NewGuid()
                     }
-                }
+                ]
             };
         }
 
@@ -315,21 +315,24 @@
         {
             //Arrange
             SetUpReturningShow(null);
-            DeleteShowCommand command = new DeleteShowCommand();
+            DeleteShowCommand command = new();
 
             //Act
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            });
         }
 
         [Test]
         public async Task Handle_ShouldReturnError_IsSaveChangesFails()
         {
             //Arrange
-            DeleteShowCommand command = new DeleteShowCommand
+            DeleteShowCommand command = new()
             {
                 ShowId = "CD9B2F47-67D3-48C0-9E45-F55476F19ADB"
             };
@@ -340,16 +343,19 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("Failed to delete show - Movie Title"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("Failed to delete show - Movie Title"));
+            });
         }
 
         //Movie
         [Test]
-        public async Task Handle_ShouldDeleteMovie_IfDataIsCorrent()
+        public async Task Handle_ShouldDeleteMovie_IfDataIsCorrect()
         {
             //Arrange
-            DeleteShowCommand command = new DeleteShowCommand
+            DeleteShowCommand command = new()
             {
                 ShowId = "CD9B2F47-67D3-48C0-9E45-F55476F19ADB"
             };
@@ -359,17 +365,21 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully deleted Movie Title"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.SuccessMessage, Is.EqualTo("Successfully deleted Movie Title"));
+            });
+
             this.repositoryMock.Verify(r => r.Delete(this.movie), Times.Once);
         }
 
         //TV Series
         [Test]
-        public async Task Handle_ShouldDeleteTVSeries_IfDataIsCorrent()
+        public async Task Handle_ShouldDeleteTVSeries_IfDataIsCorrect()
         {
             //Arrange
-            DeleteShowCommand command = new DeleteShowCommand
+            DeleteShowCommand command = new()
             {
                 ShowId = "CD9B2F47-67D3-48C0-9E45-F55476F19ADB"
             };
@@ -379,8 +389,12 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully deleted TV Series Title"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.SuccessMessage, Is.EqualTo("Successfully deleted TV Series Title"));
+            });
+
             this.repositoryMock.Verify(r => r.Delete(this.tvSeries), Times.Once);
         }
 
@@ -388,7 +402,7 @@
         [Test]
         public async Task Handle_ShouldDeleteEpisode_IfDataIsCorrect()
         {
-            DeleteShowCommand command = new DeleteShowCommand
+            DeleteShowCommand command = new()
             {
                 ShowId = "5AE0C243-971A-4C51-9710-A87E1A45F4F0"
             };
@@ -398,8 +412,12 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully deleted Episode Title"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.SuccessMessage, Is.EqualTo("Successfully deleted Episode Title"));
+            });
+
             this.repositoryMock.Verify(r => r.Delete(this.episode), Times.Once);
         }
 
@@ -407,7 +425,7 @@
         {
             IQueryable<Show> shows = new List<Show> { show! }.AsQueryable();
 
-            TestAsyncEnumerableEfCore<Show> queryable = new TestAsyncEnumerableEfCore<Show>(shows);
+            TestAsyncEnumerableEfCore<Show> queryable = new(shows);
 
             this.repositoryMock
                 .Setup(r => r.All(It.IsAny<Expression<Func<Show, bool>>>()))

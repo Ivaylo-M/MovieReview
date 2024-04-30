@@ -27,7 +27,7 @@
         public async Task Handle_ShouldReturnError_IfSav3ChangesFails()
         {
             //Arrange
-            AddShowCommand command = new AddShowCommand
+            AddShowCommand command = new()
             {
                 Dto = new AddShowDto
                 {
@@ -36,10 +36,10 @@
                     Description = "This is the description of Test1",
                     Duration = 145,
                     ReleaseDate = new DateTime(2022, 3, 20),
-                    Genres = new List<int> { 2, 3 },
-                    FilmingLocations = new List<int> { 1, 4 },
-                    CountriesOfOrigin = new List<int> { 5, 6 },
-                    Languages = new List<int> { 1 }
+                    Genres = [2, 3],
+                    FilmingLocations = [1, 4],
+                    CountriesOfOrigin = [5, 6],
+                    Languages = [1]
                 }
             };
 
@@ -50,8 +50,12 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("Failed to create show - Test1"));
+            Assert.Multiple(() =>
+            {   
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("Failed to create show - Test1"));
+            });
+
             this.repositoryMock.Verify(r => r.AddAsync(It.IsAny<Show>()), Times.Once);
             this.repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -60,7 +64,7 @@
         public async Task Handle_ShouldAddMovie_WithGivenCorrectData()
         {
             //Arrange
-            AddShowCommand command = new AddShowCommand
+            AddShowCommand command = new()
             {
                 Dto = new AddShowDto
                 {
@@ -69,10 +73,10 @@
                     Description = "This is the description of Test1",
                     Duration = 145,
                     ReleaseDate = new DateTime(2022, 3, 20),
-                    Genres = new List<int> { 2, 3 },
-                    FilmingLocations = new List<int> { 1, 4 },
-                    CountriesOfOrigin = new List<int> { 5, 6 },
-                    Languages = new List<int> { 1 }
+                    Genres = [2, 3],
+                    FilmingLocations = [1, 4],
+                    CountriesOfOrigin = [5, 6],
+                    Languages = [1]
                 }
             };
 
@@ -80,8 +84,12 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test1"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test1"));
+            });
+
             this.repositoryMock.Verify(r => r.AddAsync(It.IsAny<Show>()), Times.Once);
             this.repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -90,7 +98,7 @@
         public async Task Handle_ShouldAddTvSeries_WithGivenCorrectData()
         {
             //Arrange
-            AddShowCommand command = new AddShowCommand
+            AddShowCommand command = new()
             {
                 Dto = new AddShowDto
                 {
@@ -99,10 +107,10 @@
                     Description = "This is the description of Test2",
                     ReleaseDate = new DateTime(2022, 3, 20),
                     EndDate = new DateTime(2024, 5, 6),
-                    Genres = new List<int> { 2, 3 },
-                    FilmingLocations = new List<int> { 1, 4 },
-                    CountriesOfOrigin = new List<int> { 5, 6 },
-                    Languages = new List<int> { 1 }
+                    Genres = [2, 3],
+                    FilmingLocations = [1, 4],
+                    CountriesOfOrigin = [5, 6],
+                    Languages = [1]
                 }
             };
 
@@ -110,8 +118,12 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test2"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test2"));
+            });
+
             this.repositoryMock.Verify(r => r.AddAsync(It.IsAny<Show>()), Times.Once);
             this.repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -120,7 +132,7 @@
         public async Task Handle_ShouldAddTvSeriesEpisode_WithGivenCorrectData()
         {
             //Arrange
-            AddShowCommand command = new AddShowCommand
+            AddShowCommand command = new()
             {
                 Dto = new AddShowDto
                 {
@@ -142,8 +154,12 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test3"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.SuccessMessage, Is.EqualTo("Successfully added Test3"));
+            });
+
             this.repositoryMock.Verify(r => r.AddAsync(It.IsAny<Show>()), Times.Once);
             this.repositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -152,7 +168,7 @@
         public async Task Handle_ShouldReturnError_WhenSeriesIdIsInvalid()
         {
             //Arrange
-            AddShowCommand command = new AddShowCommand
+            AddShowCommand command = new()
             {
                 Dto = new AddShowDto
                 {
@@ -174,8 +190,11 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            });
         }
     }
 }

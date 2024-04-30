@@ -9,7 +9,7 @@
     {
         public void Configure(EntityTypeBuilder<WatchListItem> builder)
         {
-            builder.ToTable("WachListItems");
+            builder.ToTable("WatchListItems");
 
             builder.HasKey(wli => new { wli.UserId, wli.ShowId });
 

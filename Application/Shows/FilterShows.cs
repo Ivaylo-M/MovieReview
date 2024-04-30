@@ -46,7 +46,7 @@
                 }
 
                 if (request.Title != null) {
-                    shows = shows.Where(s => s.Title.ToLower().Contains(request.Title.ToLower()));
+                    shows = shows.Where(s => s.Title.Contains(request.Title, StringComparison.OrdinalIgnoreCase));
                 }
 
                 if (request.ShowTypes != null)

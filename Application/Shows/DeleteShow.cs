@@ -38,7 +38,7 @@
                     .Include(s => s.UserRatings)
                     .Include(s => s.WatchListItems)
                     .Include(s => s.Episodes)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(CancellationToken.None);
 
                 if (show == null)
                 {

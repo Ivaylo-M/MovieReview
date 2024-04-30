@@ -42,14 +42,14 @@
                     .Include(s => s.CountriesOfOrigin)
                     .Include(s => s.Languages)
                     .Include(s => s.Photo)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(CancellationToken.None);
 
                 if (show == null)
                 {
                     return Result<ShowEditShowDto>.Failure(ShowNotFound);
                 }
 
-                ShowEditShowDto showEditShowDto = new ShowEditShowDto
+                ShowEditShowDto showEditShowDto = new()
                 {
                     Title = show.Title,
                     Description = show.Description,

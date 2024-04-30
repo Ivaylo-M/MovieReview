@@ -24,7 +24,7 @@
         [HttpPost]
         public async Task<ActionResult> AddShowPhoto([FromForm] AddShowPhotoDto addShowPhotoDto)
         {
-            AddShowPhotoCommand command = new AddShowPhotoCommand
+            AddShowPhotoCommand command = new()
             {
                 File = addShowPhotoDto.File,
                 ShowId = addShowPhotoDto.ShowId
@@ -39,7 +39,7 @@
         [HttpPost]
         public async Task<ActionResult> DeleteShowPhoto([FromBody] string showId)
         {
-            DeleteShowPhotoCommand command = new DeleteShowPhotoCommand
+            DeleteShowPhotoCommand command = new()
             {
                 ShowId = showId
             };

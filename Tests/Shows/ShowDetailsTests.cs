@@ -1,6 +1,5 @@
 ﻿namespace Tests.Shows
 {
-    using System.Linq.Expressions;
     using Application.DTOs.Reviews;
     using Application.DTOs.Shows;
     using Application.Response;
@@ -9,7 +8,10 @@
     using MockQueryable.EntityFrameworkCore;
     using Moq;
     using Persistence.Repositories;
+    using System.Linq.Expressions;
     using Tests.Comparers;
+    using Tests.Comparers.Reviews;
+    using Tests.Comparers.Shows;
     using static Application.Shows.ShowDetails;
 
     public class ShowDetailsTests
@@ -26,7 +28,7 @@
             this.repositoryMock = new Mock<IRepository>();
             this.handler = new ShowDetailsHandler(this.repositoryMock.Object);
 
-            Dictionary<int, Genre> genres = new Dictionary<int, Genre>
+            Dictionary<int, Genre> genres = new()
             {
                 { 1, new Genre { GenreId = 1, Name = "Comedy" } },
                 { 2, new Genre { GenreId = 2, Name = "Romance" } },
@@ -36,7 +38,7 @@
                 { 6, new Genre { GenreId = 6, Name = "Drama" }} 
             };
 
-            Dictionary<int, Language> languages = new Dictionary<int, Language> 
+            Dictionary<int, Language> languages = new()
             {
                 { 1, new Language { LanguageId = 1, Name = "English" } },
                 { 2, new Language { LanguageId = 1, Name = "Spanish" } },
@@ -46,7 +48,7 @@
                 { 6, new Language { LanguageId = 1, Name = "Romanian" } }
             };
 
-            Dictionary<int, CountryOfOrigin> countriesOfOrigin = new Dictionary<int, CountryOfOrigin>
+            Dictionary<int, CountryOfOrigin> countriesOfOrigin = new()
             {
                 { 1, new CountryOfOrigin { CountryOfOriginId = 1, Name = "Bulgaria" } },
                 { 2, new CountryOfOrigin { CountryOfOriginId = 2, Name = "Spain" } },
@@ -56,14 +58,14 @@
                 { 6, new CountryOfOrigin { CountryOfOriginId = 6, Name = "UK" } }
             };
 
-            Dictionary<int, FilmingLocation> filmingLocations = new Dictionary<int, FilmingLocation>
+            Dictionary<int, FilmingLocation> filmingLocations = new()
             {
                 { 1, new FilmingLocation { FilmingLocationId = 1, Name = "Malibu" } },
                 { 2, new FilmingLocation { FilmingLocationId = 2, Name = "Malta" } },
                 { 3, new FilmingLocation { FilmingLocationId = 3, Name = "NDK" } },
                 { 4, new FilmingLocation { FilmingLocationId = 4, Name = "LA" } },
-                { 5, new FilmingLocation { FilmingLocationId = 5, Name = "Hogwards" } },
-                { 6, new FilmingLocation { FilmingLocationId = 6, Name = "Dalas" } }
+                { 5, new FilmingLocation { FilmingLocationId = 5, Name = "Hogwarts" } },
+                { 6, new FilmingLocation { FilmingLocationId = 6, Name = "Dallas" } }
             };
 
             this.movie = new Show
@@ -79,8 +81,8 @@
                     PhotoId = "photoId",
                     Url = "photoUrl"
                 },
-                Genres = new List<ShowGenre>
-                {
+                Genres =
+                [
                     new ShowGenre
                     {
                         GenreId = 1,
@@ -96,9 +98,9 @@
                         GenreId = 6,
                         Genre = genres[6]
                     }
-                },
-                Languages = new List<ShowLanguage>
-                {
+                ],
+                Languages =
+                [
                     new ShowLanguage
                     {
                         LanguageId = 1,
@@ -114,9 +116,9 @@
                         LanguageId = 3,
                         Language = languages[3]
                     }
-                },
-                CountriesOfOrigin = new List<ShowCountryOfOrigin>
-                {
+                ],
+                CountriesOfOrigin =
+                [
                     new ShowCountryOfOrigin
                     {
                         CountryOfOriginId = 1,
@@ -132,9 +134,9 @@
                         CountryOfOriginId = 3,
                         CountryOfOrigin = countriesOfOrigin[3]
                     }
-                },
-                FilmingLocations = new List<ShowFilmingLocation>
-                {
+                ],
+                FilmingLocations =
+                [
                     new ShowFilmingLocation
                     {
                         FilmingLocationId = 1,
@@ -150,9 +152,9 @@
                         FilmingLocationId = 3,
                         FilmingLocation = filmingLocations[3]
                     }
-                },
-                UserRatings = new List<Rating>
-                {
+                ],
+                UserRatings =
+                [
                     new Rating 
                     {
                         UserId = Guid.Parse("084CC46F-5456-4686-8067-9C919969A46E"),
@@ -168,9 +170,9 @@
                         UserId = Guid.Parse("F041A629-BD68-481D-8355-026B3F98FB69"),
                         Stars = 9
                     }
-                },
-                UserReviews = new List<Review>
-                {
+                ],
+                UserReviews =
+                [
                     new Review 
                     {
                         ReviewId = Guid.Parse("BD78A7F8-E1B3-413C-8419-0E147E076341"),
@@ -196,7 +198,7 @@
                         CreatedAt = new DateTime(2022, 7, 6)
                     },
 
-                }
+                ]
             };
 
             this.tvSeries = new Show
@@ -212,8 +214,8 @@
                     PhotoId = "photoId",
                     Url = "photoUrl"
                 },
-                Genres = new List<ShowGenre>
-                {
+                Genres =
+                [
                     new ShowGenre
                     {
                         GenreId = 3,
@@ -229,9 +231,9 @@
                         GenreId = 5,
                         Genre = genres[5]
                     }
-                },
-                Languages = new List<ShowLanguage>
-                {
+                ],
+                Languages =
+                [
                     new ShowLanguage
                     {
                         LanguageId = 4,
@@ -247,9 +249,9 @@
                         LanguageId = 6,
                         Language = languages[6]
                     }
-                },
-                CountriesOfOrigin = new List<ShowCountryOfOrigin>
-                {
+                ],
+                CountriesOfOrigin =
+                [
                     new ShowCountryOfOrigin
                     {
                         CountryOfOriginId = 4,
@@ -265,9 +267,9 @@
                         CountryOfOriginId = 6,
                         CountryOfOrigin = countriesOfOrigin[6]
                     }
-                },
-                FilmingLocations = new List<ShowFilmingLocation>
-                {
+                ],
+                FilmingLocations =
+                [
                     new ShowFilmingLocation
                     {
                         FilmingLocationId = 4,
@@ -283,9 +285,9 @@
                         FilmingLocationId = 6,
                         FilmingLocation = filmingLocations[6]
                     }
-                },
-                UserRatings = new List<Rating>
-                {
+                ],
+                UserRatings =
+                [
                     new Rating 
                     {
                         UserId = Guid.Parse("94A36B0B-CBE3-4EE4-BCD4-C39F10051193"),
@@ -301,9 +303,9 @@
                         UserId = Guid.Parse("F041A629-BD68-481D-8355-026B3F98FB69"),
                         Stars = 9
                     }
-                },
-                UserReviews = new List<Review>
-                {
+                ],
+                UserReviews =
+                [
                     new Review 
                     {
                         ReviewId = Guid.Parse("BD78A7F8-E1B3-413C-8419-0E147E076341"),
@@ -328,9 +330,9 @@
                         Content = "Review Content3",
                         CreatedAt = new DateTime(2022, 7, 6)
                     },
-                },
-                Episodes = new List<Show>
-                {
+                ],
+                Episodes =
+                [
                     new Show
                     {
                         ShowId = Guid.Parse("3483F9F3-F068-4039-8E81-596BC6905B21"),
@@ -363,7 +365,7 @@
                         ReleaseDate = new DateTime(2021, 2, 7),
                         Season = 2
                     }
-                }
+                ]
             };
 
             this.episode = new Show 
@@ -382,8 +384,8 @@
                 Season = 1,
                 SeriesId = Guid.Parse("0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6"),
                 Series = this.tvSeries,
-                UserRatings = new List<Rating>
-                {
+                UserRatings =
+                [
                     new Rating 
                     {
                         UserId = Guid.Parse("084CC46F-5456-4686-8067-9C919969A46E"),
@@ -399,9 +401,9 @@
                         UserId = Guid.Parse("F041A629-BD68-481D-8355-026B3F98FB69"),
                         Stars = 9
                     }
-                },
-                UserReviews = new List<Review>
-                {
+                ],
+                UserReviews =
+                [
                     new Review 
                     {
                         ReviewId = Guid.Parse("BD78A7F8-E1B3-413C-8419-0E147E076341"),
@@ -426,7 +428,7 @@
                         Content = "Review Content3",
                         CreatedAt = new DateTime(2022, 7, 6)
                     },
-                }
+                ]
             };
 
             this.episode.Series!.Episodes!.Add(episode);
@@ -437,14 +439,17 @@
         {
             //Arrange
             SetUpReturningShow(null);
-            ShowDetailsQuery query = new ShowDetailsQuery();
+            ShowDetailsQuery query = new();
 
             //Act
             Result<ShowDetailsDto> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            });
         }
 
         [Test]
@@ -453,7 +458,7 @@
             //Arrange
             SetUpReturningShow(this.movie);
             SetUpCheckingUser(false);
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "70752D2F-C3AD-46D1-94BD-24610CA60529"
             };
@@ -462,8 +467,11 @@
             Result<ShowDetailsDto> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.ErrorMessage, Is.EqualTo("The user is not found"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("The user is not found"));
+            });
         }
 
         //Movie
@@ -477,13 +485,13 @@
             SetUpReturningShow(this.movie);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Comedy", "Romance", "Drama" };
-            IEnumerable<string> expectedLanguages = new List<string> { "English", "Spanish", "Russian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Bulgaria", "Spain", "China" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "Malibu", "Malta", "NDK" };
+            IEnumerable<string> expectedGenres = ["Comedy", "Romance", "Drama"];
+            IEnumerable<string> expectedLanguages = ["English", "Spanish", "Russian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Bulgaria", "Spain", "China"];
+            IEnumerable<string> expectedFilmingLocations = ["Malibu", "Malta", "NDK"];
 
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "70752D2F-C3AD-46D1-94BD-24610CA60529",
                 UserId = "084CC46F-5456-4686-8067-9C919969A46E"
@@ -526,13 +534,13 @@
             SetUpReturningShow(this.movie);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Comedy", "Romance", "Drama" };
-            IEnumerable<string> expectedLanguages = new List<string> { "English", "Spanish", "Russian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Bulgaria", "Spain", "China" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "Malibu", "Malta", "NDK" };
+            IEnumerable<string> expectedGenres = ["Comedy", "Romance", "Drama"];
+            IEnumerable<string> expectedLanguages = ["English", "Spanish", "Russian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Bulgaria", "Spain", "China"];
+            IEnumerable<string> expectedFilmingLocations = ["Malibu", "Malta", "NDK"];
 
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "70752D2F-C3AD-46D1-94BD-24610CA60529",
                 UserId = "9F99ECF9-346D-456B-B019-16A0B3200616"
@@ -575,13 +583,13 @@
             SetUpReturningShow(this.movie);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Comedy", "Romance", "Drama" };
-            IEnumerable<string> expectedLanguages = new List<string> { "English", "Spanish", "Russian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Bulgaria", "Spain", "China" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "Malibu", "Malta", "NDK" };
+            IEnumerable<string> expectedGenres = ["Comedy", "Romance", "Drama"];
+            IEnumerable<string> expectedLanguages = ["English", "Spanish", "Russian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Bulgaria", "Spain", "China"];
+            IEnumerable<string> expectedFilmingLocations = ["Malibu", "Malta", "NDK"];
 
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "70752D2F-C3AD-46D1-94BD-24610CA60529",
                 UserId = "F041A629-BD68-481D-8355-026B3F98FB69"
@@ -622,11 +630,11 @@
             SetUpReturningShow(this.movie);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Comedy", "Romance", "Drama" };
-            IEnumerable<string> expectedLanguages = new List<string> { "English", "Spanish", "Russian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Bulgaria", "Spain", "China" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "Malibu", "Malta", "NDK" };
-            LastReviewDto expectedLastReviewDto = new LastReviewDto
+            IEnumerable<string> expectedGenres = ["Comedy", "Romance", "Drama"];
+            IEnumerable<string> expectedLanguages = ["English", "Spanish", "Russian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Bulgaria", "Spain", "China"];
+            IEnumerable<string> expectedFilmingLocations = ["Malibu", "Malta", "NDK"];
+            LastReviewDto expectedLastReviewDto = new()
             {
                 ReviewId = "BD78A7F8-E1B3-413C-8419-0E147E076341",
                 Heading = "Review Heading3",
@@ -636,7 +644,7 @@
             };
 
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "70752D2F-C3AD-46D1-94BD-24610CA60529",
                 UserId = "F041A629-BD68-481D-8355-026B3F98FB69"
@@ -677,11 +685,11 @@
             SetUpReturningShow(this.movie);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Comedy", "Romance", "Drama" };
-            IEnumerable<string> expectedLanguages = new List<string> { "English", "Spanish", "Russian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Bulgaria", "Spain", "China" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "Malibu", "Malta", "NDK" };
-            LastReviewDto expectedLastReviewDto = new LastReviewDto
+            IEnumerable<string> expectedGenres = ["Comedy", "Romance", "Drama"];
+            IEnumerable<string> expectedLanguages = ["English", "Spanish", "Russian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Bulgaria", "Spain", "China"];
+            IEnumerable<string> expectedFilmingLocations = ["Malibu", "Malta", "NDK"];
+            LastReviewDto expectedLastReviewDto = new()
             {
                 ReviewId = "BD78A7F8-E1B3-413C-8419-0E147E076341",
                 Heading = "Review Heading3",
@@ -691,7 +699,7 @@
             };
 
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "70752D2F-C3AD-46D1-94BD-24610CA60529",
                 UserId = "94A36B0B-CBE3-4EE4-BCD4-C39F10051193"
@@ -736,13 +744,13 @@
             SetUpReturningShow(this.tvSeries);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
 
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 UserId = "C4E9C8C3-773C-4578-834B-D1295B600653"
@@ -785,13 +793,13 @@
             SetUpReturningShow(this.tvSeries);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
 
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 UserId = "4BD68700-7030-4D37-B74C-9DE086C8482A"
@@ -834,13 +842,13 @@
             SetUpReturningShow(this.tvSeries);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
 
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 UserId = "F041A629-BD68-481D-8355-026B3F98FB69"
@@ -881,11 +889,11 @@
             SetUpReturningShow(this.tvSeries);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
-            LastReviewDto expectedLastReviewDto = new LastReviewDto
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
+            LastReviewDto expectedLastReviewDto = new()
             {
                 ReviewId = "BD78A7F8-E1B3-413C-8419-0E147E076341",
                 Heading = "Review Heading3",
@@ -894,7 +902,7 @@
                 IsMine = false
             };
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 UserId = "F041A629-BD68-481D-8355-026B3F98FB69"
@@ -935,11 +943,11 @@
             SetUpReturningShow(this.tvSeries);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
-            LastReviewDto expectedLastReviewDto = new LastReviewDto
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
+            LastReviewDto expectedLastReviewDto = new()
             {
                 ReviewId = "BD78A7F8-E1B3-413C-8419-0E147E076341",
                 Heading = "Review Heading3",
@@ -948,7 +956,7 @@
                 IsMine = true
             };
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 UserId = "94A36B0B-CBE3-4EE4-BCD4-C39F10051193"
@@ -994,17 +1002,17 @@
             SetUpReturningShow(this.episode);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
-            TVSeriesDto expectedTVSeries = new TVSeriesDto
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
+            TVSeriesDto expectedTVSeries = new()
             {
                 Id = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 Title = "TV Series Title"
             };
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "6019FFB7-6E56-4AD8-8149-5B7541021C48",
                 UserId = "C4E9C8C3-773C-4578-834B-D1295B600653"
@@ -1047,17 +1055,17 @@
             SetUpReturningShow(this.episode);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
-            TVSeriesDto expectedTVSeries = new TVSeriesDto
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
+            TVSeriesDto expectedTVSeries = new()
             {
                 Id = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 Title = "TV Series Title"
             };
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "6019FFB7-6E56-4AD8-8149-5B7541021C48",
                 UserId = "6FAE8217-170C-4B2C-AB5F-559A87688A59"
@@ -1100,17 +1108,17 @@
             SetUpReturningShow(this.episode);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
-            TVSeriesDto expectedTVSeries = new TVSeriesDto
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
+            TVSeriesDto expectedTVSeries = new()
             {
                 Id = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 Title = "TV Series Title"
             };
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "6019FFB7-6E56-4AD8-8149-5B7541021C48",
                 UserId = "084CC46F-5456-4686-8067-9C919969A46E"
@@ -1151,17 +1159,17 @@
             SetUpReturningShow(this.episode);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
-            TVSeriesDto expectedTVSeries = new TVSeriesDto
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
+            TVSeriesDto expectedTVSeries = new()
             {
                 Id = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 Title = "TV Series Title"
             };
 
-            LastReviewDto expectedLastReviewDto = new LastReviewDto
+            LastReviewDto expectedLastReviewDto = new()
             {
                 ReviewId = "BD78A7F8-E1B3-413C-8419-0E147E076341",
                 Heading = "Review Heading3",
@@ -1170,7 +1178,7 @@
                 IsMine = false
             };
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "6019FFB7-6E56-4AD8-8149-5B7541021C48",
                 UserId = "084CC46F-5456-4686-8067-9C919969A46E"
@@ -1211,17 +1219,17 @@
             SetUpReturningShow(this.episode);
             SetUpCheckingUser(true);
 
-            IEnumerable<string> expectedGenres = new List<string> { "Action", "Sci-fi", "Fantasy" };
-            IEnumerable<string> expectedLanguages = new List<string> { "Mandarin", "French", "Romanian" };
-            IEnumerable<string> expectedCountriesOfOrigin = new List<string> { "Argentina", "USA", "UK" };
-            IEnumerable<string> expectedFilmingLocations = new List<string> { "LA", "Hogwards", "Dalas" };
-            TVSeriesDto expectedTVSeries = new TVSeriesDto
+            IEnumerable<string> expectedGenres = ["Action", "Sci-fi", "Fantasy"];
+            IEnumerable<string> expectedLanguages = ["Mandarin", "French", "Romanian"];
+            IEnumerable<string> expectedCountriesOfOrigin = ["Argentina", "USA", "UK"];
+            IEnumerable<string> expectedFilmingLocations = ["LA", "Hogwarts", "Dallas"];
+            TVSeriesDto expectedTVSeries = new()
             {
                 Id = "0EDA20D2-20A1-44A9-9BE2-C411E90A5EC6",
                 Title = "TV Series Title"
             };
 
-            LastReviewDto expectedLastReviewDto = new LastReviewDto
+            LastReviewDto expectedLastReviewDto = new()
             {
                 ReviewId = "BD78A7F8-E1B3-413C-8419-0E147E076341",
                 Heading = "Review Heading3",
@@ -1230,7 +1238,7 @@
                 IsMine = true
             };
 
-            ShowDetailsQuery query = new ShowDetailsQuery
+            ShowDetailsQuery query = new()
             {
                 ShowId = "6019FFB7-6E56-4AD8-8149-5B7541021C48",
                 UserId = "94A36B0B-CBE3-4EE4-BCD4-C39F10051193"
@@ -1268,7 +1276,7 @@
         {
             IQueryable<Show> shows = new List<Show> { show! }.AsQueryable();
 
-            TestAsyncEnumerableEfCore<Show> queryable = new TestAsyncEnumerableEfCore<Show>(shows);
+            TestAsyncEnumerableEfCore<Show> queryable = new(shows);
 
             this.repositoryMock
                 .Setup(r => r.All(It.IsAny<Expression<Func<Show, bool>>>()))

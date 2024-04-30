@@ -16,11 +16,11 @@
         [ForeignKey(nameof(ShowId))]
         public Show Show { get; set; } = null!;
 
-        [Comment("langauge id")]
+        [Comment("language id")]
         [Required]
         public int LanguageId { get; set; }
 
-        [Comment("langauge")]
+        [Comment("language")]
         [ForeignKey(nameof(LanguageId))]
         public Language Language { get; set; } = null!;
     }

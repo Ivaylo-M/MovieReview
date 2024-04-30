@@ -42,7 +42,7 @@
 
             public async Task<Result<UserDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
-                User user = new User
+                User user = new()
                 {
                     Email = request.Email,
                     UserName = request.Name
@@ -60,7 +60,7 @@
 
                     await this.signInManager.SignInAsync(user, false);
 
-                    UserDto userDto = new UserDto
+                    UserDto userDto = new()
                     {
                         Name = user.UserName,
                         Token = this.tokenService.CreateToken(user)

@@ -39,7 +39,7 @@
                     return Result<ShowAddShowDto>.Failure(InvalidShowType);
                 }
 
-                ShowAddShowDto showAddShowDto = new ShowAddShowDto
+                ShowAddShowDto showAddShowDto = new()
                 {
                     ShowType = new ShowTypeDto
                     {

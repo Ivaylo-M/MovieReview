@@ -1,14 +1,14 @@
 using Application.DTOs.Shows;
 
-namespace Tests.Comparers
+namespace Tests.Comparers.Shows
 {
     public class TVSeriesDtoComparer : IComparer<TVSeriesDto>
     {
         public int Compare(TVSeriesDto? x, TVSeriesDto? y)
         {
-            if (x!.Id.ToLower() != y!.Id.ToLower()) 
+            if (!x!.Id.Equals(y!.Id, StringComparison.OrdinalIgnoreCase))
             {
-                return x.Id.CompareTo(y.Id);
+                return StringComparer.OrdinalIgnoreCase.Compare(x.Id, y.Id);
             }
 
             if (x!.Title != y.Title)

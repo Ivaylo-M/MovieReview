@@ -41,7 +41,7 @@
                     }
                 }
 
-                Show show = new Show
+                Show show = new()
                 {
                     Title = request.Dto.Title,
                     ShowType = request.Dto.ShowType,

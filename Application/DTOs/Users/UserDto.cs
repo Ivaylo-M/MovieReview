@@ -1,6 +1,5 @@
 ﻿namespace Application.DTOs.Users
 {
-    using Domain.Enums;
     using System.ComponentModel.DataAnnotations;
 
     public class UserDto
@@ -11,9 +10,9 @@
         [Required]
         public string Token { get; set; } = null!;
 
-        public string? Gander { get; set; }
+        public string? Gender { get; set; }
 
-        public DateTime? DateOfBitrh { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string? RegionOfResidence { get; set; }
 

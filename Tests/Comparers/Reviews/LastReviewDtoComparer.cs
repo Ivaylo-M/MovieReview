@@ -1,16 +1,18 @@
 using Application.DTOs.Reviews;
 
-namespace Tests.Comparers
+namespace Tests.Comparers.Reviews
 {
     public class LastReviewDtoComparer : IComparer<LastReviewDto>
     {
         public int Compare(LastReviewDto? x, LastReviewDto? y)
         {
-            if (x!.ReviewId.ToLower() != y!.ReviewId.ToLower()) {
-                return x.ReviewId.ToLower().CompareTo(y.ReviewId.ToLower());
+            if (!x!.ReviewId.Equals(y!.ReviewId, StringComparison.OrdinalIgnoreCase))
+            {
+                return StringComparer.OrdinalIgnoreCase.Compare(x!.ReviewId, y!.ReviewId);
             }
 
-            if (x.Heading != y.Heading) {
+            if (x.Heading != y.Heading)
+            {
                 return x.Heading.CompareTo(y.Heading);
             }
 
@@ -19,7 +21,7 @@ namespace Tests.Comparers
                 return x.Content.CompareTo(y.Content);
             }
 
-            if (x.CreatedAt != y.CreatedAt) 
+            if (x.CreatedAt != y.CreatedAt)
             {
                 return x.CreatedAt.CompareTo(y.CreatedAt);
             }

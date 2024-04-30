@@ -46,17 +46,20 @@
                 .Handle(new AddShowPhotoCommand(), CancellationToken.None);
 
             //Assert
-            Assert.IsFalse(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("File is not selected or empty"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("File is not selected or empty"));
+            });
         }
 
         [Test]
         public async Task Handle_ShouldReturnError_WhenFileLengthIsZero()
         {
             //Arrange
-            Mock<IFormFile> fileMock = new Mock<IFormFile>();
+            Mock<IFormFile> fileMock = new();
 
-            AddShowPhotoCommand command = new AddShowPhotoCommand
+            AddShowPhotoCommand command = new()
             {
                 File = fileMock.Object,
                 ShowId = "test id"
@@ -65,10 +68,13 @@
             //Act
             Result<Unit> result = await this.handler
                 .Handle(command, CancellationToken.None);
-
+            
             //Assert
-            Assert.IsFalse(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("File is not selected or empty"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("File is not selected or empty"));
+            });
         }
 
         [Test]
@@ -82,8 +88,11 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.IsFalse(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            });
         }
 
         [Test]
@@ -99,13 +108,16 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.IsFalse(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show already have photo"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show already have photo"));
+            });
         }
 
         [Test]
         public async Task Handle_ShouldAddPhoto_WhenGivingCorrectData()
-        { 
+        {
             //Arrange
             AddShowPhotoCommand command = SetUpReturningPhoto();
             SetUpReturningShow(this.show);
@@ -122,9 +134,12 @@
             Result<Unit> result = await this.handler.Handle(command, CancellationToken.None);
 
             //Assert
-            Assert.IsTrue(result.IsSuccess);
-            Assert.That(result.SuccessMessage, Is.EqualTo("Successfully uploaded photo"));
-        } 
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.SuccessMessage, Is.EqualTo("Successfully uploaded photo"));
+            });
+        }
 
         private void SetUpReturningShow(Show show)
         {
@@ -133,13 +148,13 @@
                 .ReturnsAsync(show);
         }
 
-        private AddShowPhotoCommand SetUpReturningPhoto()
+        private static AddShowPhotoCommand SetUpReturningPhoto()
         {
-            Mock<IFormFile> fileMock = new Mock<IFormFile>();
+            Mock<IFormFile> fileMock = new();
 
             fileMock.Setup(f => f.Length).Returns(2);
 
-            AddShowPhotoCommand command = new AddShowPhotoCommand
+            AddShowPhotoCommand command = new()
             {
                 File = fileMock.Object,
                 ShowId = Guid.NewGuid().ToString()

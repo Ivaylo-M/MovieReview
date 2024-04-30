@@ -1,4 +1,4 @@
-﻿namespace Tests.Comparers
+﻿namespace Tests.Comparers.CountriesOfOrigin
 {
     using Application.DTOs.CountriesOfOrigin;
 

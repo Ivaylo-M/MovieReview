@@ -52,7 +52,7 @@
                     .Include(s => s.Series!.Episodes)
                     .Include(s => s.Photo)
                     .Include(s => s.Episodes)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(CancellationToken.None);
 
                 if (show == null)
                 {
@@ -64,7 +64,7 @@
                     return Result<ShowDetailsDto>.Failure(UserNotFound);
                 }
 
-                ShowDetailsDto showDetailsDto = new ShowDetailsDto
+                ShowDetailsDto showDetailsDto = new()
                 {
                     ShowId = request.ShowId,
                     ShowType = show.ShowType,
@@ -85,7 +85,7 @@
                     showDetailsDto.NumberOfRatings = show.UserRatings.Count;
                 }
 
-                if (show.UserReviews != null && show.UserReviews.Any())
+                if (show.UserReviews != null && show.UserReviews.Count > 0)
                 {
                     showDetailsDto.LastReview = show.UserReviews
                         .OrderByDescending(ur => ur.CreatedAt)
@@ -132,14 +132,10 @@
                 return Result<ShowDetailsDto>.Success(showDetailsDto);
             }
 
-            private int GetEpisodeNumber(Show episode)
+            private static int GetEpisodeNumber(Show episode)
             {
-                Show[] orderedEpisodes = episode.Series!.Episodes!
-                    .Where(s => s.Season == episode.Season)
-                    .OrderBy(s => s.ReleaseDate)
-                    .ToArray();
-
-                int episodeNumber = Array.IndexOf(orderedEpisodes, episode) + 1;
+                int episodeNumber = episode.Series!.Episodes!
+                    .Count(s => s.Season == episode.Season && s.ReleaseDate < episode.ReleaseDate) + 1;
 
                 return episodeNumber;
             }

@@ -13,6 +13,10 @@
     using Persistence.Repositories;
     using System.Linq.Expressions;
     using Tests.Comparers;
+    using Tests.Comparers.CountriesOfOrigin;
+    using Tests.Comparers.FilmingLocations;
+    using Tests.Comparers.Genres;
+    using Tests.Comparers.Languages;
     using static Application.Shows.ShowEditShow;
 
     public class ShowEditShowTests

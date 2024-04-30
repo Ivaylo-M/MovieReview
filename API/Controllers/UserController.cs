@@ -28,7 +28,7 @@
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] RegisterUserDto registerDto)
         {
-            RegisterUserCommand command = new RegisterUserCommand
+            RegisterUserCommand command = new()
             {
                 Name = registerDto.Name,
                 Email = registerDto.Email,
@@ -44,7 +44,7 @@
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
         {
-            LoginUserCommand command = new LoginUserCommand
+            LoginUserCommand command = new()
             {
                 Email = loginDto.Email,
                 Password = loginDto.Password,
@@ -61,7 +61,7 @@
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            LogoutUserCommand command = new LogoutUserCommand
+            LogoutUserCommand command = new()
             {
                 UserId = User!.GetById()
             };

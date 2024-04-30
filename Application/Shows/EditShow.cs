@@ -39,7 +39,7 @@
                     .Include(s => s.FilmingLocations)
                     .Include(s => s.Genres)
                     .Include(s => s.Languages)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(CancellationToken.None);
 
                 if (show == null)
                 {

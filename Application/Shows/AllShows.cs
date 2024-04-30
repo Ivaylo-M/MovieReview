@@ -34,7 +34,7 @@
 
             public async Task<Result<IEnumerable<AllShowsDto>>> Handle(AllShowsQuery request, CancellationToken cancellationToken)
             {
-                if (await this.repository.AnyAsync<User>(u => u.Id.ToString().Equals(request.UserId.ToLower())) == false)
+                if (request.UserId != null && await this.repository.AnyAsync<User>(u => u.Id.ToString().Equals(request.UserId.ToLower())) == false)
                 {
                     return Result<IEnumerable<AllShowsDto>>.Failure(UserNotFound);
                 }
@@ -51,22 +51,27 @@
                         ReleaseYear = s.ReleaseDate.Year,
                         EndYear = s.EndDate.HasValue ? s.EndDate.Value.Year : null,
                         Duration = s.Duration,
-                        AverageRating = s.UserRatings.Count > 0 ? (float)s.UserRatings.Average(ur => ur.Stars) : 0f,
+                        AverageRating = s.UserRatings.Count > 0 ? (float)Math.Round(s.UserRatings.Average(ur => ur.Stars), 1) : 0f,
                         NumberOfRatings = s.UserRatings.Count,
                         MyRating = GetUserRating(s.UserRatings, request.UserId),
                         Description = s.Description,
                         Genres = s.Genres.Select(sg => sg.GenreId)
                     })
-                    .ToListAsync();
+                    .ToListAsync(CancellationToken.None);
 
                 this.memoryCache.Set("Shows", shows);
 
                 return Result<IEnumerable<AllShowsDto>>.Success(shows);
             }
 
-            private static int? GetUserRating(ICollection<Rating> ratings, string userId)
+            private static int? GetUserRating(ICollection<Rating> ratings, string? userId)
             {
-                Rating? rating = ratings.FirstOrDefault(ur => ur.UserId.ToString().ToLower().Equals(userId.ToLower()));
+                if (userId == null)
+                {
+                    return null;
+                }
+
+                Rating? rating = ratings.FirstOrDefault(ur => ur.UserId.ToString().Equals(userId, StringComparison.OrdinalIgnoreCase));
 
                 if (rating == null)
                 {

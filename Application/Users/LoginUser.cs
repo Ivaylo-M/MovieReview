@@ -44,7 +44,7 @@
             {
                 User? user = await this.repository
                     .All<User>(u => u.Email == request.Email)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(CancellationToken.None);
 
                 if (user == null)
                 {
@@ -60,11 +60,10 @@
                         return Result<UserDto>.Failure(FailedLogin);
                     }
 
-                    UserDto userDto = new UserDto
+                    UserDto userDto = new()
                     {
                         Name = user.UserName!,
-                        Token = this.tokenService.CreateToken(user),
-
+                        Token = this.tokenService.CreateToken(user)
                     };
 
                     return Result<UserDto>.Success(userDto);
