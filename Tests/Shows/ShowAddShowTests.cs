@@ -12,11 +12,7 @@
     using Moq;
     using Persistence.Repositories;
     using System.Linq.Expressions;
-    using Tests.Comparers;
-    using Tests.Comparers.CountriesOfOrigin;
-    using Tests.Comparers.FilmingLocations;
-    using Tests.Comparers.Genres;
-    using Tests.Comparers.Languages;
+    using Tests.Comparers.Shows;
     using static Application.Shows.ShowAddShow;
 
     public class ShowAddOrEditShowTests
@@ -38,8 +34,8 @@
             this.repositoryMock = new Mock<IRepository>();
             this.handler = new ShowAddShowHandler(this.repositoryMock.Object);
 
-            this.genres = new List<Genre>
-            {
+            this.genres =
+            [
                 new Genre
                 {
                     GenreId = 1,
@@ -55,9 +51,9 @@
                     GenreId = 3,
                     Name = "Comedy"
                 }
-            };
-            this.filmingLocations = new List<FilmingLocation>
-            {
+            ];
+            this.filmingLocations =
+            [
                 new FilmingLocation
                 {
                     FilmingLocationId = 1,
@@ -68,9 +64,9 @@
                     FilmingLocationId = 2,
                     Name = "USA"
                 }
-            };
-            this.languages = new List<Language>
-            {
+            ];
+            this.languages =
+            [
                 new Language
                 {
                     LanguageId = 1,
@@ -91,9 +87,9 @@
                     LanguageId = 4,
                     Name = "Spanish"
                 }
-            };
-            this.countriesOfOrigin = new List<CountryOfOrigin>
-            {
+            ];
+            this.countriesOfOrigin =
+            [
                 new CountryOfOrigin
                 {
                     CountryOfOriginId = 1,
@@ -104,7 +100,7 @@
                     CountryOfOriginId = 2,
                     Name = "France"
                 }
-            };
+            ];
 
             this.movieQuery = new ShowAddShowQuery
             {
@@ -136,28 +132,34 @@
             SetUpReturningTvShow(null!);
 
             //Act
-            Result<ShowAddShowDto> result = await this.handler.Handle(this.episodeQuery, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(this.episodeQuery, CancellationToken.None);
 
             //Assert
-            Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            });
         }
 
         [Test]
         public async Task Handle_ShouldReturnError_IfShowTypeIsInvalid()
         {
             //Arrange
-            ShowAddShowQuery query = new ShowAddShowQuery
+            ShowAddShowQuery query = new()
             {
                 ShowType = 0
             };
 
             //Act
-            Result<ShowAddShowDto> result = await this.handler.Handle(query, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
-            Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("The show type is invalid"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("The show type is invalid"));
+            });
         }
 
         //Movie
@@ -170,88 +172,92 @@
             SetUpReturningCollection(this.languages);
             SetUpReturningCollection(this.countriesOfOrigin);
 
-            IEnumerable<GenreDto> expectedGenres = new List<GenreDto>
+            ShowAddOrEditShowDto expectedDto = new()
             {
-                new GenreDto
+                ShowType = new()
                 {
-                    GenreId = 1,
-                    Name = "Action"
+                    Id = 1,
+                    Name = "Movie"
                 },
-                new GenreDto
-                {
-                    GenreId = 2,
-                    Name = "Romance"
-                },
-                new GenreDto
-                {
-                    GenreId = 3,
-                    Name = "Comedy"
-                }
-            };
-            IEnumerable<FilmingLocationDto> expectedFilmingLocation = new List<FilmingLocationDto>
-            {
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 1,
-                    Name = "Singapore"
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 2,
-                    Name = "USA"
-                }
-            };
-            IEnumerable<LanguageDto> expectedLanguages = new List<LanguageDto>
-            {
-                new LanguageDto 
-                {
-                    LanguageId = 1,
-                    Name = "English"
-                },
-                new LanguageDto
-                {
-                    LanguageId = 2,
-                    Name = "Chinese"
-                },
-                new LanguageDto
-                {
-                    LanguageId = 3,
-                    Name = "French"
-                },
-                new LanguageDto
-                {
-                    LanguageId = 4,
-                    Name = "Spanish"
-                }
-            };
-            IEnumerable<CountryOfOriginDto> expectedCountriesOfOrigin = new List<CountryOfOriginDto>
-            {
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 1,
-                    Name = "USA"
-                },
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 2,
-                    Name = "France"
-                }
+                Series = null,
+                Genres =
+                [
+                    new GenreDto
+                    {
+                        GenreId = 1,
+                        Name = "Action"
+                    },
+                    new GenreDto
+                    {
+                        GenreId = 2,
+                        Name = "Romance"
+                    },
+                    new GenreDto
+                    {
+                        GenreId = 3,
+                        Name = "Comedy"
+                    }
+                ],
+                Languages =
+                [
+                    new LanguageDto
+                    {
+                        LanguageId = 1,
+                        Name = "English"
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 2,
+                        Name = "Chinese"
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 3,
+                        Name = "French"
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 4,
+                        Name = "Spanish"
+                    }
+                ],
+                FilmingLocations =
+                [
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 1,
+                        Name = "Singapore"
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 2,
+                        Name = "USA"
+                    }
+                ],
+                CountriesOfOrigin =
+                [
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 1,
+                        Name = "USA"
+                    },
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 2,
+                        Name = "France"
+                    }
+                ]
             };
 
             //Act
-            Result<ShowAddShowDto> result = await this.handler.Handle(this.movieQuery, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(this.movieQuery, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.Data!.ShowType.Id, Is.EqualTo(1));
-            Assert.That(result.Data!.ShowType.Name, Is.EqualTo("Movie"));
-
-            Assert.That(result.Data!.Series, Is.EqualTo(null));
-
-            Assert.That(result.Data!.Genres, Is.EquivalentTo(expectedGenres).Using(new GenreDtoComparer()));
-            Assert.That(result.Data!.FilmingLocations, Is.EquivalentTo(expectedFilmingLocation).Using(new FilmingLocationDtoComparer()));
-            Assert.That(result.Data!.CountriesOfOrigin, Is.EquivalentTo(expectedCountriesOfOrigin).Using(new CountryOfOriginDtoComparer()));
-            Assert.That(result.Data!.Languages, Is.EquivalentTo(expectedLanguages).Using(new LanguageDtoComparer()));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Data, Is.EqualTo(expectedDto).Using(new ShowAddOrEditDtoComparer()));
+            });
         }
 
         //TV Series
@@ -264,88 +270,92 @@
             SetUpReturningCollection(this.languages);
             SetUpReturningCollection(this.countriesOfOrigin);
 
-            IEnumerable<GenreDto> expectedGenres = new List<GenreDto>
+            ShowAddOrEditShowDto expectedDto = new()
             {
-                new GenreDto
+                ShowType = new()
                 {
-                    GenreId = 1,
-                    Name = "Action"
+                    Id = 2,
+                    Name = "TVSeries"
                 },
-                new GenreDto
-                {
-                    GenreId = 2,
-                    Name = "Romance"
-                },
-                new GenreDto
-                {
-                    GenreId = 3,
-                    Name = "Comedy"
-                }
-            };
-            IEnumerable<FilmingLocationDto> expectedFilmingLocation = new List<FilmingLocationDto>
-            {
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 1,
-                    Name = "Singapore"
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 2,
-                    Name = "USA"
-                }
-            };
-            IEnumerable<LanguageDto> expectedLanguages = new List<LanguageDto>
-            {
-                new LanguageDto
-                {
-                    LanguageId = 1,
-                    Name = "English"
-                },
-                new LanguageDto
-                {
-                    LanguageId = 2,
-                    Name = "Chinese"
-                },
-                new LanguageDto
-                {
-                    LanguageId = 3,
-                    Name = "French"
-                },
-                new LanguageDto
-                {
-                    LanguageId = 4,
-                    Name = "Spanish"
-                }
-            };
-            IEnumerable<CountryOfOriginDto> expectedCountriesOfOrigin = new List<CountryOfOriginDto>
-            {
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 1,
-                    Name = "USA"
-                },
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 2,
-                    Name = "France"
-                }
+                Series = null,
+                Genres =
+                [
+                    new GenreDto
+                    {
+                        GenreId = 1,
+                        Name = "Action"
+                    },
+                    new GenreDto
+                    {
+                        GenreId = 2,
+                        Name = "Romance"
+                    },
+                    new GenreDto
+                    {
+                        GenreId = 3,
+                        Name = "Comedy"
+                    }
+                ],
+                Languages =
+                [
+                    new LanguageDto
+                    {
+                        LanguageId = 1,
+                        Name = "English"
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 2,
+                        Name = "Chinese"
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 3,
+                        Name = "French"
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 4,
+                        Name = "Spanish"
+                    }
+                ],
+                FilmingLocations =
+                [
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 1,
+                        Name = "Singapore"
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 2,
+                     Name = "USA"
+                    }
+                ],
+                CountriesOfOrigin =
+                [
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 1,
+                        Name = "USA"
+                    },
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 2,
+                        Name = "France"
+                    }
+                ]
             };
 
             //Act
-            Result<ShowAddShowDto> result = await this.handler.Handle(this.tvSeriesQuery, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(this.tvSeriesQuery, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.Data!.ShowType.Id, Is.EqualTo(2));
-            Assert.That(result.Data!.ShowType.Name, Is.EqualTo("TVSeries"));
-
-            Assert.That(result.Data!.Series, Is.EqualTo(null));
-
-            Assert.That(result.Data!.Genres, Is.EquivalentTo(expectedGenres).Using(new GenreDtoComparer()));
-            Assert.That(result.Data!.FilmingLocations, Is.EquivalentTo(expectedFilmingLocation).Using(new FilmingLocationDtoComparer()));
-            Assert.That(result.Data!.CountriesOfOrigin, Is.EquivalentTo(expectedCountriesOfOrigin).Using(new CountryOfOriginDtoComparer()));
-            Assert.That(result.Data!.Languages, Is.EquivalentTo(expectedLanguages).Using(new LanguageDtoComparer()));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Data, Is.EqualTo(expectedDto).Using(new ShowAddOrEditDtoComparer()));
+            });
         }
 
         //Episode
@@ -355,16 +365,29 @@
             //Arrange
             SetUpReturningTvShow(this.tvSeries);
 
+            ShowAddOrEditShowDto expectedDto = new()
+            {
+                ShowType = new()
+                {
+                    Id = 3,
+                    Name = "Episode"
+                },
+                Series = new()
+                {
+                    Id = "b9099dc4-ff09-4b49-86b8-ac23572486fb",
+                    Title = "TV Series Title"
+                }
+            };
+
             //Act
-            Result<ShowAddShowDto> result = await this.handler.Handle(this.episodeQuery, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(this.episodeQuery, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.Data!.ShowType.Id, Is.EqualTo(3));
-            Assert.That(result.Data!.ShowType.Name, Is.EqualTo("Episode"));
-
-            Assert.That(result.Data!.Series!.Id, Is.EqualTo("b9099dc4-ff09-4b49-86b8-ac23572486fb"));
-            Assert.That(result.Data!.Series!.Title, Is.EqualTo("TV Series Title"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Data, Is.EqualTo(expectedDto).Using(new ShowAddOrEditDtoComparer()));
+            });
         }
 
         private void SetUpReturningCollection<T>(IEnumerable<T> collection) where T : class 

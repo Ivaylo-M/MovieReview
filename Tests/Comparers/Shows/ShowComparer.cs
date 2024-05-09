@@ -1,6 +1,7 @@
 ﻿namespace Tests.Comparers.Shows
 {
     using Domain;
+    using Tests.Extensions;
 
     public class ShowComparer : IComparer<Show>
     {
@@ -53,51 +54,29 @@
                 return seriesIdResult;
             }
 
-            int genresResult = CompareCollections(x.Genres.Select(g => g.GenreId).ToList(), y.Genres.Select(g => g.GenreId).ToList());
+            int genresResult = x.Genres.Select(g => g.GenreId).Compare(y.Genres.Select(g => g.GenreId));
             if (genresResult != 0)
             {
                 return genresResult;
             }
 
-            int filmingLocationsResult = CompareCollections(x.FilmingLocations.Select(fl => fl.FilmingLocationId).ToList(), y.FilmingLocations.Select(fl => fl.FilmingLocationId).ToList());
+            int filmingLocationsResult = x.FilmingLocations.Select(fl => fl.FilmingLocationId).Compare(y.FilmingLocations.Select(fl => fl.FilmingLocationId));
             if (filmingLocationsResult != 0)
             {
                 return filmingLocationsResult;
             }
 
-            int languagesResult = CompareCollections(x.Languages.Select(l => l.LanguageId).ToList(), y.Languages.Select(l => l.LanguageId).ToList());
+            int languagesResult = x.Languages.Select(l => l.LanguageId).Compare(y.Languages.Select(l => l.LanguageId));
             if (languagesResult != 0)
             {
                 return languagesResult;
             }
 
-            int countriesOfOriginResult = CompareCollections(x.CountriesOfOrigin.Select(coo => coo.CountryOfOriginId).ToList(), y.CountriesOfOrigin.Select(coo => coo.CountryOfOriginId).ToList());
+            int countriesOfOriginResult = x.CountriesOfOrigin.Select(coo => coo.CountryOfOriginId).Compare(y.CountriesOfOrigin.Select(coo => coo.CountryOfOriginId));
 
             if (countriesOfOriginResult != 0)
             {
                 return countriesOfOriginResult;
-            }
-
-            return 0;
-        }
-
-        private static int CompareCollections(IList<int>? x, IList<int>? y)
-        {
-            if (ReferenceEquals(x, y)) return 0;
-            if (x == null) return -1;
-            if (y == null) return 1;
-
-            if (x.Count != y.Count)
-            {
-                return x.Count.CompareTo(y.Count);
-            }
-
-            for (int i = 0; i < x.Count; i++)
-            {
-                if (x[i] != y[i])
-                {
-                    return x[i].CompareTo(y[i]);
-                }
             }
 
             return 0;

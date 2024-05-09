@@ -19,12 +19,12 @@
 
     public class ShowEditShow
     {
-        public class ShowEditShowQuery : IRequest<Result<ShowEditShowDto>>
+        public class ShowEditShowQuery : IRequest<Result<ShowAddOrEditShowDto>>
         {
             public string ShowId { get; set; } = null!;
         }
 
-        public class ShowEditShowHandler : IRequestHandler<ShowEditShowQuery, Result<ShowEditShowDto>>
+        public class ShowEditShowHandler : IRequestHandler<ShowEditShowQuery, Result<ShowAddOrEditShowDto>>
         {
             private readonly IRepository repository;
 
@@ -33,7 +33,7 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<ShowEditShowDto>> Handle(ShowEditShowQuery request, CancellationToken cancellationToken)
+            public async Task<Result<ShowAddOrEditShowDto>> Handle(ShowEditShowQuery request, CancellationToken cancellationToken)
             {
                 Show? show = await this.repository.All<Show>(s => s.ShowId.ToString().Equals(request.ShowId.ToLower()))
                     .Include(s => s.Series)
@@ -46,10 +46,10 @@
 
                 if (show == null)
                 {
-                    return Result<ShowEditShowDto>.Failure(ShowNotFound);
+                    return Result<ShowAddOrEditShowDto>.Failure(ShowNotFound);
                 }
 
-                ShowEditShowDto showEditShowDto = new()
+                ShowAddOrEditShowDto showEditShowDto = new()
                 {
                     Title = show.Title,
                     Description = show.Description,
@@ -116,7 +116,7 @@
                     };
                 }
 
-                return Result<ShowEditShowDto>.Success(showEditShowDto);
+                return Result<ShowAddOrEditShowDto>.Success(showEditShowDto);
             }
         }
     }

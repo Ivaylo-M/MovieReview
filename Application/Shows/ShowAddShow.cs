@@ -16,14 +16,14 @@
 
     public class ShowAddShow
     {
-        public class ShowAddShowQuery : IRequest<Result<ShowAddShowDto>>
+        public class ShowAddShowQuery : IRequest<Result<ShowAddOrEditShowDto>>
         {
             public string? TVSeriesId { get; set; }
 
             public ShowType ShowType { get; set; }
         }
 
-        public class ShowAddShowHandler : IRequestHandler<ShowAddShowQuery, Result<ShowAddShowDto>>
+        public class ShowAddShowHandler : IRequestHandler<ShowAddShowQuery, Result<ShowAddOrEditShowDto>>
         {
             private readonly IRepository repository;
 
@@ -32,14 +32,14 @@
                 this.repository = repository;
             }
 
-            public async Task<Result<ShowAddShowDto>> Handle(ShowAddShowQuery request, CancellationToken cancellationToken)
+            public async Task<Result<ShowAddOrEditShowDto>> Handle(ShowAddShowQuery request, CancellationToken cancellationToken)
             {
                 if (request.ShowType == default)
                 {
-                    return Result<ShowAddShowDto>.Failure(InvalidShowType);
+                    return Result<ShowAddOrEditShowDto>.Failure(InvalidShowType);
                 }
 
-                ShowAddShowDto showAddShowDto = new()
+                ShowAddOrEditShowDto showAddShowDto = new()
                 {
                     ShowType = new ShowTypeDto
                     {
@@ -54,7 +54,7 @@
 
                     if (tvSeries == null)
                     {
-                        return Result<ShowAddShowDto>.Failure(ShowNotFound);
+                        return Result<ShowAddOrEditShowDto>.Failure(ShowNotFound);
                     }
 
                     showAddShowDto.Series = new TVSeriesDto
@@ -95,7 +95,7 @@
                         });
                 }
 
-                return await Task.FromResult(Result<ShowAddShowDto>.Success(showAddShowDto));
+                return await Task.FromResult(Result<ShowAddOrEditShowDto>.Success(showAddShowDto));
             }
         }
     }

@@ -455,7 +455,7 @@
             Assert.Multiple(() =>
             {
                 Assert.That(result.IsSuccess, Is.True);
-                Assert.That(result.Data!, Is.EqualTo(this.expectedShows).Using(new AllShowsDtoComparer()));
+                Assert.That(shows, Is.EqualTo(this.expectedShows).Using(new AllShowsDtoComparer()));
             });
         }
 
@@ -479,7 +479,7 @@
             Assert.Multiple(() =>
             {
                 Assert.That(result.IsSuccess, Is.True);
-                Assert.That(result.Data!, Is.EqualTo(this.expectedShows).Using(new AllShowsDtoComparer()));
+                Assert.That(shows, Is.EqualTo(this.expectedShows).Using(new AllShowsDtoComparer()));
             });
         }
 

@@ -12,11 +12,7 @@
     using Moq;
     using Persistence.Repositories;
     using System.Linq.Expressions;
-    using Tests.Comparers;
-    using Tests.Comparers.CountriesOfOrigin;
-    using Tests.Comparers.FilmingLocations;
-    using Tests.Comparers.Genres;
-    using Tests.Comparers.Languages;
+    using Tests.Comparers.Shows;
     using static Application.Shows.ShowEditShow;
 
     public class ShowEditShowTests
@@ -45,14 +41,14 @@
                 ReleaseDate = new DateTime(2022, 3, 4),
                 Description = "Movie Description",
                 Duration = 123,
-                PhotoId = "photoId1",
+                PhotoId = "PhotoId1",
                 Photo = new Photo
                 {
-                    PhotoId = "photoId1",
+                    PhotoId = "PhotoId1",
                     Url = "Photo Url1"
                 },
-                Genres = new List<ShowGenre>
-                {
+                Genres =
+                [
                     new ShowGenre
                     {
                         GenreId = 1
@@ -61,9 +57,9 @@
                     {
                         GenreId = 3
                     }
-                },
-                FilmingLocations = new List<ShowFilmingLocation>
-                {
+                ],
+                FilmingLocations =
+                [
                     new ShowFilmingLocation
                     {
                         FilmingLocationId = 2
@@ -76,9 +72,9 @@
                     {
                         FilmingLocationId = 7
                     }
-                },
-                Languages = new List<ShowLanguage>
-                {
+                ],
+                Languages =
+                [
                     new ShowLanguage
                     {
                         LanguageId = 2
@@ -87,9 +83,9 @@
                     {
                         LanguageId = 4
                     }
-                },
-                CountriesOfOrigin = new List<ShowCountryOfOrigin>
-                {
+                ],
+                CountriesOfOrigin =
+                [
                     new ShowCountryOfOrigin
                     {
                         CountryOfOriginId = 1
@@ -102,7 +98,7 @@
                     {
                         CountryOfOriginId = 3
                     }
-                }
+                ]
             };
             this.tvSeries = new Show
             {
@@ -112,14 +108,14 @@
                 ShowType = ShowType.TVSeries,
                 ReleaseDate = new DateTime(2020, 4, 5),
                 EndDate = new DateTime(2022, 3, 4),
-                PhotoId = "photoId2",
+                PhotoId = "PhotoId2",
                 Photo = new Photo
                 {
-                    PhotoId = "photoId2",
+                    PhotoId = "PhotoId2",
                     Url = "Photo Url2"
                 },
-                Genres = new List<ShowGenre>
-                {
+                Genres =
+                [
                     new ShowGenre
                     {
                         GenreId = 2
@@ -128,9 +124,9 @@
                     {
                         GenreId = 3
                     }
-                },
-                FilmingLocations = new List<ShowFilmingLocation>
-                {
+                ],
+                FilmingLocations =
+                [
                     new ShowFilmingLocation
                     {
                         FilmingLocationId = 1
@@ -143,9 +139,9 @@
                     {
                         FilmingLocationId = 3
                     }
-                },
-                Languages = new List<ShowLanguage>
-                {
+                ],
+                Languages =
+                [
                     new ShowLanguage
                     {
                         LanguageId = 1
@@ -154,9 +150,9 @@
                     {
                         LanguageId = 3
                     }
-                },
-                CountriesOfOrigin = new List<ShowCountryOfOrigin>
-                {
+                ],
+                CountriesOfOrigin =
+                [
                     new ShowCountryOfOrigin
                     {
                         CountryOfOriginId = 1
@@ -169,7 +165,7 @@
                     {
                         CountryOfOriginId = 3
                     }
-                }
+                ]
             };
             this.episode = new Show
             {
@@ -180,10 +176,10 @@
                 ReleaseDate = new DateTime(2021, 6, 7),
                 Duration = 23,
                 Season = 1,
-                PhotoId = "photoId3",
+                PhotoId = "PhotoId3",
                 Photo = new Photo
                 {
-                    PhotoId = "photoId3",
+                    PhotoId = "PhotoId3",
                     Url = "Photo Url3"
                 },
                 SeriesId = Guid.Parse("e436ba43-8fb3-4562-af2a-3869f94fe290"),
@@ -194,8 +190,8 @@
                 }
             };
 
-            this.genres = new List<Genre>
-            {
+            this.genres =
+            [
                 new Genre
                 {
                     GenreId = 1,
@@ -211,9 +207,9 @@
                     GenreId = 3,
                     Name = "Comedy"
                 }
-            };
-            this.filmingLocations = new List<FilmingLocation>
-            {
+            ];
+            this.filmingLocations =
+            [
                 new FilmingLocation
                 {
                     FilmingLocationId = 1,
@@ -249,9 +245,9 @@
                     FilmingLocationId = 7,
                     Name = "Monaco"
                 },
-            };
-            this.languages = new List<Language>
-            {
+            ];
+            this.languages =
+            [
                 new Language
                 {
                     LanguageId = 1,
@@ -272,9 +268,9 @@
                     LanguageId = 4,
                     Name = "French"
                 }
-            };
-            this.countryOfOrigins = new List<CountryOfOrigin>
-            {
+            ];
+            this.countryOfOrigins =
+            [
                 new CountryOfOrigin
                 {
                     CountryOfOriginId = 1,
@@ -295,7 +291,7 @@
                     CountryOfOriginId = 4,
                     Name = "Russia"
                 }
-            };
+            ];
         }
 
         [Test]
@@ -303,14 +299,17 @@
         {
             //Arrange
             SetUpReturningShow(null);
-            ShowEditShowQuery query = new ShowEditShowQuery();
+            ShowEditShowQuery query = new();
 
             //Act
-            Result<ShowEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
-            Assert.False(result.IsSuccess);
-            Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.ErrorMessage, Is.EqualTo("This show does not exist! Please select an existing one"));
+            });
         }
 
         //Movie
@@ -325,153 +324,158 @@
             SetUpReturningCollection(this.languages);
             SetUpReturningCollection(this.countryOfOrigins);
 
-            ShowEditShowQuery query = new ShowEditShowQuery
+            ShowEditShowQuery query = new()
             {
                 ShowId = "306ec54c-896c-4e13-8e04-d5023b50a05f"
             };
 
-            IEnumerable<GenreDto> expectedGenres = new List<GenreDto>
+            ShowAddOrEditShowDto expectedDto = new()
             {
-                new GenreDto
+                Title = "Movie Title",
+                Description = "Movie Description",
+                ReleaseDate = new DateTime(2022, 3, 4),
+                Duration = 123,
+                ShowType = new()
                 {
-                    GenreId = 1,
-                    Name = "Action",
-                    HasValue = true
+                    Id = 1,
+                    Name = "Movie"
                 },
-                new GenreDto
+                Photo = new()
                 {
-                    GenreId = 2,
-                    Name = "Romance",
-                    HasValue = false
+                    Id = "PhotoId1",
+                    Url = "Photo Url1"
                 },
-                new GenreDto
-                {
-                    GenreId = 3,
-                    Name = "Comedy",
-                    HasValue = true
-                }
-            };
-            IEnumerable<FilmingLocationDto> expectedFilmingLocation = new List<FilmingLocationDto>
-            {
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 1,
-                    Name = "USA",
-                    HasValue = false
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 2,
-                    Name = "France",
-                    HasValue = true
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 3,
-                    Name = "Spain",
-                    HasValue = false
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 4,
-                    Name = "Siberia",
-                    HasValue = false
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 5,
-                    Name = "Bulgaria",
-                    HasValue = true
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 6,
-                    Name = "Japan",
-                    HasValue = false
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 7,
-                    Name = "Monaco",
-                    HasValue = true
-                }
-            };
-            IEnumerable<LanguageDto> expectedLanguages = new List<LanguageDto>
-            {
-                new LanguageDto
-                {
-                    LanguageId = 1,
-                    Name = "Bulgarian",
-                    HasValue = false
-                },
-                new LanguageDto
-                {
-                    LanguageId = 2,
-                    Name = "English",
-                    HasValue = true
-                },
-                new LanguageDto
-                {
-                    LanguageId = 3,
-                    Name = "Chinese",
-                    HasValue = false
-                },
-                new LanguageDto
-                {
-                    LanguageId = 4,
-                    Name = "French",
-                    HasValue = true
-                }
-            };
-            IEnumerable<CountryOfOriginDto> expectedCountriesOfOrigin = new List<CountryOfOriginDto>
-            {
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 1,
-                    Name = "Spain",
-                    HasValue = true
-                },
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 2,
-                    Name = "France",
-                    HasValue = true
-                },
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 3,
-                    Name = "Bulgaria",
-                    HasValue = true
-                },
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 4,
-                    Name = "Russia",
-                    HasValue = false
-                }
+                Genres = 
+                [
+                    new GenreDto
+                    {
+                        GenreId = 1,
+                        Name = "Action",
+                        HasValue = true
+                    },
+                    new GenreDto
+                    {
+                        GenreId = 2,
+                        Name = "Romance",
+                        HasValue = false
+                    },
+                    new GenreDto
+                    {
+                        GenreId = 3,
+                        Name = "Comedy",
+                        HasValue = true
+                    }
+                ],
+                FilmingLocations =
+                [
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 1,
+                        Name = "USA",
+                        HasValue = false
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 2,
+                        Name = "France",
+                        HasValue = true
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 3,
+                        Name = "Spain",
+                        HasValue = false
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 4,
+                        Name = "Siberia",
+                        HasValue = false
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 5,
+                        Name = "Bulgaria",
+                        HasValue = true
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 6,
+                        Name = "Japan",
+                        HasValue = false
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 7,
+                        Name = "Monaco",
+                        HasValue = true
+                    }
+                ],
+                Languages =
+                [
+                    new LanguageDto
+                    {
+                        LanguageId = 1,
+                        Name = "Bulgarian",
+                        HasValue = false
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 2,
+                        Name = "English",
+                        HasValue = true
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 3,
+                        Name = "Chinese",
+                        HasValue = false
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 4,
+                        Name = "French",
+                        HasValue = true
+                    }
+                ],
+                CountriesOfOrigin =
+                [
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 1,
+                        Name = "Spain",
+                        HasValue = true
+                    },
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 2,
+                        Name = "France",
+                        HasValue = true
+                    },
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 3,
+                        Name = "Bulgaria",
+                        HasValue = true
+                    },
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 4,
+                        Name = "Russia",
+                        HasValue = false
+                    }
+                ]
             };
 
             //Act
-            Result<ShowEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.Data!.Title, Is.EqualTo("Movie Title"));
-            Assert.That(result.Data!.Description, Is.EqualTo("Movie Description"));
-            Assert.That(result.Data!.ReleaseDate, Is.EqualTo(new DateTime(2022, 3, 4)));
-            Assert.That(result.Data!.Duration, Is.EqualTo(123));
-            Assert.That(result.Data!.ShowType.Id, Is.EqualTo(1));
-            Assert.That(result.Data!.ShowType.Name, Is.EqualTo("Movie"));
-            Assert.That(result.Data!.EndDate, Is.EqualTo(null));
-            Assert.That(result.Data!.Series, Is.EqualTo(null));
-            Assert.That(result.Data!.Season, Is.EqualTo(null));
-            Assert.That(result.Data!.Photo!.Id, Is.EqualTo("photoId1"));
-            Assert.That(result.Data!.Photo!.Url, Is.EqualTo("Photo Url1"));
-
-            Assert.That(result.Data!.Genres, Is.EquivalentTo(expectedGenres).Using(new GenreDtoComparer()));
-            Assert.That(result.Data!.FilmingLocations, Is.EquivalentTo(expectedFilmingLocation).Using(new FilmingLocationDtoComparer()));
-            Assert.That(result.Data!.CountriesOfOrigin, Is.EquivalentTo(expectedCountriesOfOrigin).Using(new CountryOfOriginDtoComparer()));
-            Assert.That(result.Data!.Languages, Is.EquivalentTo(expectedLanguages).Using(new LanguageDtoComparer()));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Data, Is.EqualTo(expectedDto).Using(new ShowAddOrEditDtoComparer()));
+            });
         }
 
         //TV Series
@@ -486,153 +490,158 @@
             SetUpReturningCollection(this.languages);
             SetUpReturningCollection(this.countryOfOrigins);
 
-            ShowEditShowQuery query = new ShowEditShowQuery
+            ShowEditShowQuery query = new()
             {
                 ShowId = "e7e8a36f-f4e1-4d69-8346-45a5244cbded"
             };
 
-            IEnumerable<GenreDto> expectedGenres = new List<GenreDto>
+            ShowAddOrEditShowDto expectedDto = new()
             {
-                new GenreDto
+                Title = "TV Series Title",
+                Description = "TV Series Description",
+                ReleaseDate = new DateTime(2020, 4, 5),
+                EndDate = new DateTime(2022, 3, 4),
+                ShowType = new()
                 {
-                    GenreId = 1,
-                    Name = "Action",
-                    HasValue = false
+                    Id = 2,
+                    Name = "TVSeries"
                 },
-                new GenreDto
+                Photo = new()
                 {
-                    GenreId = 2,
-                    Name = "Romance",
-                    HasValue = true
+                    Id = "PhotoId2",
+                    Url = "Photo Url2"
                 },
-                new GenreDto
-                {
-                    GenreId = 3,
-                    Name = "Comedy",
-                    HasValue = true
-                }
-            };
-            IEnumerable<FilmingLocationDto> expectedFilmingLocation = new List<FilmingLocationDto>
-            {
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 1,
-                    Name = "USA",
-                    HasValue = true
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 2,
-                    Name = "France",
-                    HasValue = true
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 3,
-                    Name = "Spain",
-                    HasValue = true
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 4,
-                    Name = "Siberia",
-                    HasValue = false
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 5,
-                    Name = "Bulgaria",
-                    HasValue = false
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 6,
-                    Name = "Japan",
-                    HasValue = false
-                },
-                new FilmingLocationDto
-                {
-                    FilmingLocationId = 7,
-                    Name = "Monaco",
-                    HasValue = false
-                }
-            };
-            IEnumerable<LanguageDto> expectedLanguages = new List<LanguageDto>
-            {
-                new LanguageDto
-                {
-                    LanguageId = 1,
-                    Name = "Bulgarian",
-                    HasValue = true
-                },
-                new LanguageDto
-                {
-                    LanguageId = 2,
-                    Name = "English",
-                    HasValue = false
-                },
-                new LanguageDto
-                {
-                    LanguageId = 3,
-                    Name = "Chinese",
-                    HasValue = true
-                },
-                new LanguageDto
-                {
-                    LanguageId = 4,
-                    Name = "French",
-                    HasValue = false
-                }
-            };
-            IEnumerable<CountryOfOriginDto> expectedCountriesOfOrigin = new List<CountryOfOriginDto>
-            {
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 1,
-                    Name = "Spain",
-                    HasValue = true
-                },
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 2,
-                    Name = "France",
-                    HasValue = true
-                },
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 3,
-                    Name = "Bulgaria",
-                    HasValue = true
-                },
-                new CountryOfOriginDto
-                {
-                    CountryOfOriginId = 4,
-                    Name = "Russia",
-                    HasValue = false
-                }
+                Genres =
+                [
+                    new GenreDto
+                    {
+                        GenreId = 1,
+                        Name = "Action",
+                        HasValue = false
+                    },
+                    new GenreDto
+                    {
+                        GenreId = 2,
+                        Name = "Romance",
+                        HasValue = true
+                    },
+                    new GenreDto
+                    {
+                        GenreId = 3,
+                        Name = "Comedy",
+                        HasValue = true
+                    }
+                ],
+                FilmingLocations =
+                [
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 1,
+                        Name = "USA",
+                        HasValue = true
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 2,
+                        Name = "France",
+                        HasValue = true
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 3,
+                        Name = "Spain",
+                        HasValue = true
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 4,
+                        Name = "Siberia",
+                        HasValue = false
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 5,
+                        Name = "Bulgaria",
+                        HasValue = false
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 6,
+                        Name = "Japan",
+                        HasValue = false
+                    },
+                    new FilmingLocationDto
+                    {
+                        FilmingLocationId = 7,
+                        Name = "Monaco",
+                        HasValue = false
+                    }
+                ],
+                Languages =
+                [
+                    new LanguageDto
+                    {
+                        LanguageId = 1,
+                        Name = "Bulgarian",
+                        HasValue = true
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 2,
+                        Name = "English",
+                        HasValue = false
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 3,
+                        Name = "Chinese",
+                        HasValue = true
+                    },
+                    new LanguageDto
+                    {
+                        LanguageId = 4,
+                        Name = "French",
+                        HasValue = false
+                    }
+                ],
+                CountriesOfOrigin =
+                [
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 1,
+                        Name = "Spain",
+                        HasValue = true
+                    },
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 2,
+                        Name = "France",
+                        HasValue = true
+                    },
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 3,
+                        Name = "Bulgaria",
+                        HasValue = true
+                    },
+                    new CountryOfOriginDto
+                    {
+                        CountryOfOriginId = 4,
+                        Name = "Russia",
+                        HasValue = false
+                    }
+                ]
             };
 
             //Act
-            Result<ShowEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.Data!.Title, Is.EqualTo("TV Series Title"));
-            Assert.That(result.Data!.Description, Is.EqualTo("TV Series Description"));
-            Assert.That(result.Data!.ReleaseDate, Is.EqualTo(new DateTime(2020, 4, 5)));
-            Assert.That(result.Data!.EndDate, Is.EqualTo(new DateTime(2022, 3, 4)));
-            Assert.That(result.Data!.ShowType.Id, Is.EqualTo(2));
-            Assert.That(result.Data!.ShowType.Name, Is.EqualTo("TVSeries"));
-            Assert.That(result.Data!.Duration, Is.EqualTo(null));
-            Assert.That(result.Data!.Series, Is.EqualTo(null));
-            Assert.That(result.Data!.Season, Is.EqualTo(null));
-            Assert.That(result.Data!.Photo!.Id, Is.EqualTo("photoId2"));
-            Assert.That(result.Data!.Photo!.Url, Is.EqualTo("Photo Url2"));
-
-            Assert.That(result.Data!.Genres, Is.EquivalentTo(expectedGenres).Using(new GenreDtoComparer()));
-            Assert.That(result.Data!.FilmingLocations, Is.EquivalentTo(expectedFilmingLocation).Using(new FilmingLocationDtoComparer()));
-            Assert.That(result.Data!.CountriesOfOrigin, Is.EquivalentTo(expectedCountriesOfOrigin).Using(new CountryOfOriginDtoComparer()));
-            Assert.That(result.Data!.Languages, Is.EquivalentTo(expectedLanguages).Using(new LanguageDtoComparer()));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Data, Is.EqualTo(expectedDto).Using(new ShowAddOrEditDtoComparer()));
+            });
         }
 
         //Episode
@@ -642,33 +651,49 @@
             //Arrange
             SetUpReturningShow(this.episode);
 
-            ShowEditShowQuery query = new ShowEditShowQuery
+            ShowEditShowQuery query = new()
             {
                 ShowId = "69b947e9-17c6-4c0b-a4ab-b8fb26947b6f"
             };
 
+            ShowAddOrEditShowDto expectedDto = new()
+            {
+                Title = "Episode Title",
+                Description = "Episode Description",
+                ReleaseDate = new DateTime(2021, 6, 7),
+                Duration = 23,
+                ShowType = new()
+                {
+                    Id = 3,
+                    Name = "Episode"
+                },
+                Photo = new()
+                {
+                    Id = "PhotoId3",
+                    Url = "Photo Url3"
+                },
+                Season = 1,
+                Series = new()
+                {
+                    Id = "e436ba43-8fb3-4562-af2a-3869f94fe290",
+                    Title = "Title of TV Series"
+                }
+            };
+
             //Act
-            Result<ShowEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
+            Result<ShowAddOrEditShowDto> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
-            Assert.True(result.IsSuccess);
-            Assert.That(result.Data!.Title, Is.EqualTo("Episode Title"));
-            Assert.That(result.Data!.Description, Is.EqualTo("Episode Description"));
-            Assert.That(result.Data!.ReleaseDate, Is.EqualTo(new DateTime(2021, 6, 7)));
-            Assert.That(result.Data!.EndDate, Is.EqualTo(null));
-            Assert.That(result.Data!.ShowType.Id, Is.EqualTo(3));
-            Assert.That(result.Data!.ShowType.Name, Is.EqualTo("Episode"));
-            Assert.That(result.Data!.Duration, Is.EqualTo(23));
-            Assert.That(result.Data!.Series!.Id, Is.EqualTo("e436ba43-8fb3-4562-af2a-3869f94fe290"));
-            Assert.That(result.Data!.Series!.Title, Is.EqualTo("Title of TV Series"));
-            Assert.That(result.Data!.Season, Is.EqualTo(1));
-            Assert.That(result.Data!.Photo!.Id, Is.EqualTo("photoId3"));
-            Assert.That(result.Data!.Photo!.Url, Is.EqualTo("Photo Url3"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Data, Is.EqualTo(expectedDto).Using(new ShowAddOrEditDtoComparer()));
+            });
         }
 
         private void SetUpReturningCollection<T>(IEnumerable<T> collection) where T : class
         {
-            TestAsyncEnumerableEfCore<T> queryable = new TestAsyncEnumerableEfCore<T>(collection.AsQueryable());
+            TestAsyncEnumerableEfCore<T> queryable = new(collection.AsQueryable());
 
             this.repositoryMock
                 .Setup(r => r.All<T>())
@@ -679,7 +704,7 @@
         {
             IQueryable<Show> shows = new List<Show> { show! }.AsQueryable();
 
-            TestAsyncEnumerableEfCore<Show> queryable = new TestAsyncEnumerableEfCore<Show>(shows);
+            TestAsyncEnumerableEfCore<Show> queryable = new(shows);
 
             this.repositoryMock
                 .Setup(r => r.All(It.IsAny<Expression<Func<Show, bool>>>()))

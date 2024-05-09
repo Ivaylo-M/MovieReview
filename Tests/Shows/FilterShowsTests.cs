@@ -1,14 +1,10 @@
 ﻿namespace Tests.Shows
 {
-    using Microsoft.Extensions.Caching.Memory;
-    
-    using Domain.Enums;
-    using Application.Response;
     using Application.DTOs.Shows;
-    
+    using Application.Response;
+    using Domain.Enums;
+    using Microsoft.Extensions.Caching.Memory;
     using static Application.Shows.FilterShows;
-    using Tests.Comparers.Shows;
-    using Azure.Core;
 
     [TestFixture]
     public class FilterShowTests
@@ -106,503 +102,67 @@
             this.handler = new FilterShowsHandler(memoryCache);
         }
 
-        //By Title
         [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithTitleContainingTest() 
-        {
-            //Arrange
-            string expectedTitle = "Test";
-            FilterShowsQuery query = new()
-            {
-                Title = expectedTitle
-            };
+        //Title
+        [TestCase("Test", null, null, null, null, new[] { "Test1", "Test2", "Test3", "Test4", "Test5" })]
+        [TestCase("Test5", null, null, null, null, new[] { "Test5" })]
+        [TestCase("TEST5", null, null, null, null, new[] { "Test5" })]
+        [TestCase("test5", null, null, null, null, new[] { "Test5" })]
+        [TestCase("Past", null, null, null, null, new string[0])]
 
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByTitle(expectedTitle);
+        //ShowTypes
+        [TestCase(null, new[] { ShowType.Movie }, null, null, null, new[] { "Test1", "Test2", "Test3" })]
+        [TestCase(null, new[] { ShowType.TVSeries }, null, null, null, new[] { "Test4", "Test5" })]
+        [TestCase(null, new[] { ShowType.Movie, ShowType.TVSeries }, null, null, null, new[] { "Test1", "Test2", "Test3", "Test4", "Test5" })]
 
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnEmptyCollection_WithDifferentTitleName() 
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                Title = "Past"
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(0));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnCollectionWithOneRecord_WithTitleNameTest5()
-        {
-            //Arrange
-            string expectedTitle = "Test5";
-            FilterShowsQuery query = new()
-            {
-                Title = expectedTitle
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByTitle(expectedTitle);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnCollectionWithOneRecord_WithTitleNameTEST5()
-        {
-            //Arrange
-            string expectedTitle = "TEST5";
-            FilterShowsQuery query = new()
-            {
-                Title = expectedTitle
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByTitle(expectedTitle);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnCollectionWithOneRecord_WithTitleNametest5()
-        {
-            //Arrange
-            string expectedTitle = "test5";
-            FilterShowsQuery query = new()
-            {
-                Title = expectedTitle
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByTitle(expectedTitle);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        //By ShowType
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithShowTypeMovie()
-        {
-            //Arrange
-            IEnumerable<ShowType> expectedShowTypes = [ShowType.Movie];
-            FilterShowsQuery query = new()
-            {
-                ShowTypes = expectedShowTypes
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByShowTypes(expectedShowTypes);
-
-            //Act 
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithShowTypeTVSeries()
-        {
-            //Arrange
-            IEnumerable<ShowType> expectedShowTypes = [ShowType.TVSeries];
-            FilterShowsQuery query = new()
-            {
-                ShowTypes = expectedShowTypes
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByShowTypes(expectedShowTypes);
-
-            //Act 
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithShowTypesMovieAnTVSeries()
-        {
-            //Arrange
-            IEnumerable<ShowType> expectedShowTypes = [ShowType.Movie, ShowType.TVSeries];
-            FilterShowsQuery query = new()
-            {
-                ShowTypes = expectedShowTypes
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByShowTypes(expectedShowTypes);
-
-            //Act 
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnEmptyCollection_WithOneRecordWithOneGenre()
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                Genres = [7]
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(0));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllShows_WithThreeRecordWithManyGenres()
-        {
-            //Arrange
-            IEnumerable<int> expectedGenres = [1, 7];
-            FilterShowsQuery query = new()
-            {
-                Genres = expectedGenres
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByGenres(expectedGenres);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithGenreComedy()
-        {
-            //Arrange
-            IEnumerable<int> expectedGenres = [1];
-            FilterShowsQuery query = new()
-            {
-                Genres = expectedGenres
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByGenres(expectedGenres);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithGenresSciFiAndAction()
-        {
-            //Arrange
-            IEnumerable<int> expectedGenres = [3, 5];
-            FilterShowsQuery query = new()
-            {
-                Genres = expectedGenres
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByGenres(expectedGenres);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithGenresRomanceComedyAndDrama()
-        {
-            //Arrange
-            IEnumerable<int> expectedGenres = [1, 2, 4];
-            FilterShowsQuery query = new()
-            {
-                Genres = expectedGenres
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByGenres(expectedGenres);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
+        //Genres
+        [TestCase(null, null, new[] { 7 }, null, null, new string[0])]
+        [TestCase(null, null, new[] { 1, 7 }, null, null, new[] { "Test1", "Test2", "Test3" })]
+        [TestCase(null, null, new[] { 1 }, null, null, new[] { "Test1", "Test2", "Test3" })]
+        [TestCase(null, null, new[] { 3, 5 }, null, null, new[] { "Test2", "Test4" })]
+        [TestCase(null, null, new[] { 1, 2, 4 }, null, null, new[] { "Test1", "Test2", "Test3", "Test5" })]
 
         //MinReleaseYear
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithMinReleaseDate1970()
-        {
-            //Arrange
-            int expectedMinReleaseYear = 1970;
-            FilterShowsQuery query = new()
-            {
-                MinReleaseYear = expectedMinReleaseYear
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByMinReleaseYear(expectedMinReleaseYear);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithMinReleaseDate1995()
-        {
-            //Arrange
-            int expectedMinReleaseYear = 1995;
-            FilterShowsQuery query = new()
-            {
-                MinReleaseYear = expectedMinReleaseYear
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByMinReleaseYear(expectedMinReleaseYear);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnEmptyCollection_WithMinReleaseDate2030()
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                MinReleaseYear = 2030
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(0));
-        }
+        [TestCase(null, null, null, 1970, null, new[] { "Test1", "Test2", "Test3", "Test4", "Test5" })]
+        [TestCase(null, null, null, 1995, null, new[] { "Test1", "Test3", "Test5" })]
+        [TestCase(null, null, null, 2030, null, new string[0])]
 
         //MaxReleaseYear
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithMaxReleaseDate2025()
+        [TestCase(null, null, null, null, 2025, new[] { "Test1", "Test2", "Test3", "Test4", "Test5" })]
+        [TestCase(null, null, null, null, 1995, new[] { "Test2", "Test4", "Test5" })]
+        [TestCase(null, null, null, null, 1960, new string[0])]
+
+        //MinReleaseYear, MaxReleaseYear
+        [TestCase(null, null, null, 1970, 2025, new[] { "Test1", "Test2", "Test3", "Test4", "Test5" })]
+        [TestCase(null, null, null, 2000, 2020, new[] { "Test1", "Test3" })]
+        [TestCase(null, null, null, 2025, 2029, new string[0])]
+        [TestCase(null, null, null, 1920, 1940, new string[0])]
+
+        //Title, ShowTypes, Genres, MinReleaseYear, MaxReleaseYear
+        [TestCase(null, new[] { ShowType.Movie, ShowType.TVSeries }, new[] { 3 }, 1970, 2025, new[] { "Test2", "Test4" } )]
+        [TestCase("Test2", new[] { ShowType.Movie, ShowType.TVSeries }, new[] { 3 }, 1970, 2025, new[] { "Test2" } )]
+        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithExpectedFilters
+            (string? expectedTitle, ShowType[]? expectedShowTypes, int[]? expectedGenres, int? expectedMinReleaseYear, int? expectedMaxReleaseYear, string[] expectedTitles)
         {
             //Arrange
-            int expectedMaxReleaseYear = 2025;
             FilterShowsQuery query = new()
             {
+                Title = expectedTitle,
+                ShowTypes = expectedShowTypes,
+                Genres = expectedGenres,
+                MinReleaseYear = expectedMinReleaseYear,
                 MaxReleaseYear = expectedMaxReleaseYear
             };
 
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByMaxReleaseYear(expectedMaxReleaseYear);
-
             //Act
             Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
 
             //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithMaxReleaseDate1995()
-        {
-            //Arrange
-            int expectedMaxReleaseYear = 1995;
-            FilterShowsQuery query = new()
+            Assert.Multiple(() =>
             {
-                MaxReleaseYear = expectedMaxReleaseYear
-            };
-
-            IEnumerable<AllShowsDto> expectedShows = GetShowsByMaxReleaseYear(expectedMaxReleaseYear);
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data, Is.EqualTo(expectedShows).Using(new AllShowsDtoComparer()));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnEmptyCollection_WithMaxReleaseDate1960()
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                MaxReleaseYear = 1960
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(0));
-        }
-
-        //MinReleaseYear & MaxReleaseYear
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithMinReleaseDate1970AndMaxReleaseDate2025()
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                MinReleaseYear = 1970,
-                MaxReleaseYear = 2025
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(5));
-            Assert.That(result.Data!.First().Title, Is.EqualTo("Test1"));
-            Assert.That(result.Data!.Skip(1).First().Title, Is.EqualTo("Test2"));
-            Assert.That(result.Data!.Skip(2).First().Title, Is.EqualTo("Test3"));
-            Assert.That(result.Data!.Skip(3).First().Title, Is.EqualTo("Test4"));
-            Assert.That(result.Data!.Skip(4).First().Title, Is.EqualTo("Test5"));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithMinReleaseDate2000AndMaxReleaseDate2020()
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                MinReleaseYear = 2000,
-                MaxReleaseYear = 2020
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(2));
-            Assert.That(result.Data!.First().Title, Is.EqualTo("Test1"));
-            Assert.That(result.Data!.Skip(1).First().Title, Is.EqualTo("Test3"));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnEmptyCollection_WithMinReleaseDate2025AndMaxReleaseDate2029()
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                MinReleaseYear = 2025,
-                MaxReleaseYear = 2029
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(0));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnEmptyCollection_WithMinReleaseDate1920AndMaxReleaseDate1940()
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                MinReleaseYear = 1920,
-                MaxReleaseYear = 1940
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(0));
-        }
-
-        [Test]
-        public async Task Handle_ShouldReturnAllFilterShowsQuery_WithMultipleFilters()
-        {
-            //Arrange
-            FilterShowsQuery query = new()
-            {
-                ShowTypes = [ShowType.TVSeries, ShowType.Movie],
-                Genres = [3],
-                MinReleaseYear = 1970,
-                MaxReleaseYear = 2025
-            };
-
-            //Act
-            Result<IEnumerable<AllShowsDto>> result = await this.handler.Handle(query, CancellationToken.None);
-
-            //Assert
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Data!.Count(), Is.EqualTo(2));
-            Assert.That(result.Data!.First().Title, Is.EqualTo("Test2"));
-            Assert.That(result.Data!.Skip(1).First().Title, Is.EqualTo("Test4"));
-        }
-
-        private IEnumerable<AllShowsDto> GetShowsByTitle(string title)
-        {
-            return this.shows.Where(s => s.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private IEnumerable<AllShowsDto> GetShowsByShowTypes(IEnumerable<ShowType> showTypes)
-        {
-            return this.shows.Where(s => showTypes.Contains(s.ShowType));
-        }
-
-        private IEnumerable<AllShowsDto> GetShowsByGenres(IEnumerable<int> genres)
-        {
-            return this.shows.Where(s => s.Genres.Any(g => genres.Contains(g)));
-        }
-
-        private IEnumerable<AllShowsDto> GetShowsByMinReleaseYear(int minReleaseYear)
-        {
-            return this.shows.Where(s => s.ReleaseYear >= minReleaseYear);
-        }
-
-        private IEnumerable<AllShowsDto> GetShowsByMaxReleaseYear(int maxReleaseYear)
-        {
-            return this.shows.Where(s => s.ReleaseYear <= maxReleaseYear);
+                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Data!.Select(s => s.Title), Is.EqualTo(expectedTitles));
+            });
         }
     }
 }

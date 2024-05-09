@@ -55,7 +55,7 @@
                 TVSeriesId = showAddShowDataDto?.TVSeriesId
             };
 
-            Result<ShowAddShowDto> result = await this.mediator.Send(query);
+            Result<ShowAddOrEditShowDto> result = await this.mediator.Send(query);
 
             return Ok(result);
         }
@@ -83,7 +83,7 @@
                 ShowId = showId,
             };
 
-            Result<ShowEditShowDto> result = await this.mediator.Send(query);
+            Result<ShowAddOrEditShowDto> result = await this.mediator.Send(query);
 
             return Ok(result);
         }

@@ -1,6 +1,7 @@
 ﻿namespace Tests.Comparers.Shows
 {
     using Application.DTOs.Shows;
+    using Tests.Extensions;
 
     public class AllShowsDtoComparer : IComparer<AllShowsDto>
     {
@@ -63,28 +64,10 @@
                 return x.ShowType.CompareTo(y.ShowType);
             }
 
-            int genresResult = CompareGenres(x.Genres.ToList(), y.Genres.ToList());
+            int genresResult = x.Genres.Compare(y.Genres);
             if (genresResult != 0)
             {
                 return genresResult;
-            }
-
-            return 0;
-        }
-
-        private static int CompareGenres(IList<int> x, IList<int> y)
-        {
-            if (ReferenceEquals(x, y)) return 0;
-
-            if (x.Count != y.Count) return x.Count.CompareTo(y.Count);
-
-            for (int i = 0; i < x.Count; i++)
-            {
-                int elementComparison = x[i].CompareTo(y[i]);
-                if (elementComparison != 0)
-                {
-                    return elementComparison;
-                }
             }
 
             return 0;
